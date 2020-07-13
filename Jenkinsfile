@@ -145,7 +145,7 @@ pipeline {
                     }
                     sh "git tag v${TAG}"
                     sh "git push --tags origin master"
-                    sh "Rscript -e \"usethis::deploy_site_github(ssh_id = Sys.getenv(\"GITHUB_DEPLOY_PRIVATE_KEY\", \"\"))\""
+                    sh "Rscript -e \"pkgdown::deploy_site_github(ssh_id = Sys.getenv(\"GITHUB_DEPLOY_PRIVATE_KEY\", \"\"))\""
                 }
             }
             post {
