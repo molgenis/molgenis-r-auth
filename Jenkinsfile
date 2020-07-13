@@ -33,7 +33,7 @@ pipeline {
                 container('r') {
                     sh "Rscript -e \"git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')\""
                     sh "install2.r --error --repo https://registry.molgenis.org/repository/R pkgdown"
-                    sh "install2.r remotes"
+                    sh "install2.r remotes urltools httr"
                     sh "installGithub.r fdlk/lintr"
                 }
             }
