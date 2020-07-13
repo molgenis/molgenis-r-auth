@@ -12,7 +12,6 @@
 #' @examples
 #' discover("https://auth.molgenis.org")
 #' discover("https://accounts.google.com")
-#'
 #' @export
 discover <- function(auth_server) {
   openid_config_url <- auth_server
@@ -55,25 +54,28 @@ discover <- function(auth_server) {
 #'
 #' @export
 device_flow_auth <-
-  function(endpoint, client_id, scopes=c("openid", "offline_access")) {
+  function(endpoint, client_id, scopes = c("openid", "offline_access")) {
     stopifnot(
       inherits(endpoint, "oauth_endpoint"),
       is.character(client_id),
       is.character(endpoint$device)
     )
     response <- httr::POST(endpoint$device,
-                           body = list(
-                             client_id = client_id,
-                             scope = paste(scopes, collapse = " ")
-                           )
+      body = list(
+        client_id = client_id,
+        scope = paste(scopes, collapse = " ")
+      )
     )
     httr::stop_for_status(response,
-                          task = "initiate OpenID Device Flow authentication")
+      task = "initiate OpenID Device Flow authentication"
+    )
     auth_res <- httr::content(response)
-    print(paste0(
-      "We're opening a browser so you can log in with code ",
-      auth_res$user_code
-    ))
+    if (interactive()) {
+      print(paste0(
+        "We're opening a browser so you can log in with code ",
+        auth_res$user_code
+      ))
+    }
     verification_url <- auth_res$verification_uri_complete
     verification_url <- urltools::param_set(
       verification_url,
@@ -88,7 +90,7 @@ device_flow_auth <-
       pause_cap = auth_res$interval,
       pause_min = auth_res$interval,
       times = auth_res$expires_in / auth_res$interval,
-      quiet = FALSE,
+      quiet = TRUE,
       body = list(
         "client_id" = client_id,
         "grant_type" = "urn:ietf:params:oauth:grant-type:device_code",
