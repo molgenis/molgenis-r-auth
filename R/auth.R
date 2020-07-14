@@ -10,8 +10,10 @@
 #' @importFrom httr GET stop_for_status content oauth_endpoint
 #'
 #' @examples
+#' \dontrun{
 #' discover("https://auth.molgenis.org")
 #' discover("https://accounts.google.com")
+#' }
 #' @export
 discover <- function(auth_server) {
   openid_config_url <- auth_server
