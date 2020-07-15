@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">MolgenisAuth</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
       </span>
     </div>
 
@@ -66,7 +66,52 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-Helps the user authenticate.
+
+
+<div id="molgenis-r-authentication-library" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#molgenis-r-authentication-library" class="anchor"></a>Molgenis R Authentication library</h1></div>
+<p>This library can be used to discover and authenticate against an OpenID server. We have tested it using <a href="https://fusionauth.io/">fusionauth</a>.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>You can install the package using the following code.</p>
+<pre class="{r}"><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("MolgenisAuth", repos = "https://registry.molgenis.org", dependencies = TRUE)</a></code></pre>
+</div>
+<div id="usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p>You can use 2 endpoints</p>
+<ul>
+<li>
+<p><code>discover</code></p>
+<p>Is a discovery endpoint which should serve and issuer URL and a client ID</p>
+</li>
+<li>
+<p><code>device_flow_auth</code></p>
+<p>At this moment we support only the <code>device_flow</code>, Which means authentication using a code, which in return resolves a JWT token.</p>
+</li>
+</ul>
+<p>You can run these commands using the following examples:</p>
+<p>```{r, eval = FALSE}</p>
+</div>
+</div>
+<div id="request-endpoint" class="section level1">
+<h1 class="hasAnchor">
+<a href="#request-endpoint" class="anchor"></a>request endpoint</h1>
+<p>endpoint &lt;- discover(“<a href="https://auth.molgenis.org" class="uri">https://auth.molgenis.org</a>”)</p>
+</div>
+<div id="request-jwt-token" class="section level1">
+<h1 class="hasAnchor">
+<a href="#request-jwt-token" class="anchor"></a>request JWT token</h1>
+<p>device_flow_auth(endpoint, “b396233b-cdb2-449e-ac5c-a0d28b38f791”) ```</p>
+<div id="support" class="section level2">
+<h2 class="hasAnchor">
+<a href="#support" class="anchor"></a>Support</h2>
+<p>We appreciate help, so do not be shy and file pull-requests on things that are broken or file a bug report.</p>
+</div>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -91,7 +136,14 @@ Helps the user authenticate.
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://jenkins.dev.molgenis.org/job/molgenis/job/molgenis-r-auth/job/master/"><img src="https://jenkins.dev.molgenis.org/buildStatus/icon?job=molgenis%2Fmolgenis-r-auth%2Fmaster" alt="Build Status"></a></li>
+<li><a href="https://codecov.io/gh/molgenis/molgenis-r-auth"><img src="https://codecov.io/gh/molgenis/molgenis-r-auth/branch/master/graph/badge.svg" alt="codecov"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
