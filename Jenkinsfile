@@ -55,7 +55,7 @@ pipeline {
             post {
                 always {
                     container('r') {
-                        sh "Rscript -e 'lintr::lint_package()'"
+                        sh "Rscript -e 'lintr::lint_package(linters=lintr::with_defaults(object_usage_linter = NULL))'"
                         sh "Rscript -e 'library(covr);codecov()'"
                     }
                 }
@@ -80,7 +80,7 @@ pipeline {
                     sh "echo 'Building ${PACKAGE} v${TAG}'"
                     sh "R CMD build ."
                     sh "R CMD check ${PACKAGE}_${TAG}.tar.gz"
-                    sh "Rscript -e 'quit(save = \"no\", status = length(lintr::lint_package()))'"
+                    sh "Rscript -e 'quit(save = \"no\", status = length(lintr::lint_package(linters=lintr::with_defaults(object_usage_linter = NULL))))'"
                 }
             }
             post {
@@ -102,7 +102,7 @@ pipeline {
             }
             steps {
                 container('curl') {
-                    sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file ${PACKAGE}_${TAG}.tar.gz ${REGISTRY}/src/contrib/${PACKAGE}_${TAG}.tar.gz"
+                    sh "set +x; curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file ${PACKAGE}_${TAG}.tar.gz ${REGISTRY}/src/contrib/${PACKAGE}_${TAG}.tar.gz"
                 }
                 sh "git tag v${TAG}"
                 sh "git push --tags origin master"
@@ -142,7 +142,7 @@ pipeline {
                     sh "R CMD build ."
                     sh "R CMD check ${PACKAGE}_${TAG}.tar.gz"
                     container('curl') {
-                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file ${PACKAGE}_${TAG}.tar.gz ${REGISTRY}/src/contrib/${PACKAGE}_${TAG}.tar.gz"
+                        sh "set +x; curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file ${PACKAGE}_${TAG}.tar.gz ${REGISTRY}/src/contrib/${PACKAGE}_${TAG}.tar.gz"
                     }
                     sh "git tag v${TAG}"
                     sh "git push --tags origin master"
