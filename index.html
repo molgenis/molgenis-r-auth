@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">MolgenisAuth</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5</span>
       </span>
     </div>
 
@@ -93,18 +93,9 @@
 </li>
 </ul>
 <p>You can run these commands using the following examples:</p>
-<p>```{r, eval = FALSE}</p>
+<p><em>Request endpoint</em> <code>{r, eval = FALSE} endpoint &lt;- discover("https://auth.molgenis.org")</code></p>
+<p><em>Request JWT token</em> <code>{r, eval = FALSE} device_flow_auth(endpoint, "b396233b-cdb2-449e-ac5c-a0d28b38f791")</code></p>
 </div>
-</div>
-<div id="request-endpoint" class="section level1">
-<h1 class="hasAnchor">
-<a href="#request-endpoint" class="anchor"></a>request endpoint</h1>
-<p>endpoint &lt;- discover(“<a href="https://auth.molgenis.org" class="uri">https://auth.molgenis.org</a>”)</p>
-</div>
-<div id="request-jwt-token" class="section level1">
-<h1 class="hasAnchor">
-<a href="#request-jwt-token" class="anchor"></a>request JWT token</h1>
-<p>device_flow_auth(endpoint, “b396233b-cdb2-449e-ac5c-a0d28b38f791”) ```</p>
 <div id="support" class="section level2">
 <h2 class="hasAnchor">
 <a href="#support" class="anchor"></a>Support</h2>
@@ -119,6 +110,8 @@
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/molgenis/molgenis-r-auth">https://​github.com/​molgenis/​molgenis-r-auth</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/molgenis/molgenis-r-auth/issues">https://​github.com/​molgenis/​molgenis-r-auth/​issues</a>
 </li>
 </ul>
 </div>
