@@ -23,11 +23,13 @@ You can use 2 endpoints
   
 You can run these commands using the following examples:
 
+*Request endpoint*
 ```{r, eval = FALSE}
-# request endpoint
 endpoint <- discover("https://auth.molgenis.org")
+```
 
-# request JWT token
+*Request JWT token*
+```{r, eval = FALSE}
 device_flow_auth(endpoint, "b396233b-cdb2-449e-ac5c-a0d28b38f791")
 ```
 
