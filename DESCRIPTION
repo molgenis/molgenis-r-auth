@@ -10,7 +10,7 @@ Authors@R:
 Description: Helps the user authenticate.
 Imports: httr (>= 1.4.1), urltools
 URL: https://github.com/molgenis/molgenis-r-auth
-Issues: https://github.com/molgenis/molgenis-r-auth/issues
+BugReports: https://github.com/molgenis/molgenis-r-auth/issues
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
