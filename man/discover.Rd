@@ -16,7 +16,8 @@ An \code{\link{oauth_endpoint}} with the discovered endpoints.
 Performs OpenID Connect discovery on an ID Provider.
 }
 \examples{
+\dontrun{
 discover("https://auth.molgenis.org")
 discover("https://accounts.google.com")
-
+}
 }
