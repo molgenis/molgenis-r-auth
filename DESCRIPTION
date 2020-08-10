@@ -11,7 +11,12 @@ Authors@R:
              family = "de Boer",
              role = c("aut"),
              email = "t.de.boer01@umcg.nl",
-             comment = c(ORCID = "0000-0002-4492-7225")))
+             comment = c(ORCID = "0000-0002-4492-7225")),
+      person(given = "Sido",
+             family = "Haakma",
+             role = c("aut", "cre"),
+             email = "s.haakma@rug.nl",
+             comment = c(ORCID = "0000-0003-1278-9144")))
 Description: Helps the user authenticate.
 Imports: httr (>= 1.4.1), urltools
 URL: https://github.com/molgenis/molgenis-r-auth,
