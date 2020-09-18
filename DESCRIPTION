@@ -1,6 +1,6 @@
 Package: MolgenisAuth
 Title: Authentication Utils
-Version: 0.0.6.9000
+Version: 0.0.6.9001
 Authors@R: 
     c(person(given = "FDL",
              family = "Kelpin",
