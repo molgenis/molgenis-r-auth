@@ -14,7 +14,7 @@ Authors@R:
              comment = c(ORCID = "0000-0002-4492-7225")),
       person(given = "Sido",
              family = "Haakma",
-             role = c("aut", "cre"),
+             role = c("aut"),
              email = "s.haakma@rug.nl",
              comment = c(ORCID = "0000-0003-1278-9144")))
 Description: Helps the user authenticate.
