@@ -7,6 +7,7 @@ pipeline {
     environment {
         REPOSITORY = 'molgenis/molgenis-r-auth'
         REGISTRY = 'https://registry.molgenis.org/repository/r-hosted'
+        REGISTRY_DEV = 'https://registry.molgenis.org/repository/r-hosted-snapshots'
     }
     stages {
         stage('Prepare') {
@@ -102,7 +103,7 @@ pipeline {
             }
             steps {
                 container('curl') {
-                    sh "set +x; curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file ${PACKAGE}_${TAG}.tar.gz ${REGISTRY}/src/contrib/${PACKAGE}_${TAG}.tar.gz"
+                    sh "set +x; curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file ${PACKAGE}_${TAG}.tar.gz ${REGISTRY_DEV}/src/contrib/${PACKAGE}_${TAG}.tar.gz"
                 }
                 sh "git tag v${TAG}"
                 sh "git push --tags origin master"
