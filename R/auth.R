@@ -83,7 +83,7 @@ device_flow_auth <-
       verification_url,
       "client_id", client_id
     )
-    utils::browseURL(verification_url)
+    .browseURL(verification_url)
 
     response <- httr::RETRY(
       url = endpoint$access,
@@ -102,3 +102,7 @@ device_flow_auth <-
     httr::stop_for_status(response, task = "retrieve id token")
     return(httr::content(response))
   }
+
+.browseURL <- function(url) {
+  utils::browseURL(url)
+}
