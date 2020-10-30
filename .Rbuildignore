@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^Jenkinsfile$
+^.travis.yml$
