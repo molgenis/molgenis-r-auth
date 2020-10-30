@@ -4,10 +4,10 @@
 \name{MolgenisAuth-package}
 \alias{MolgenisAuth}
 \alias{MolgenisAuth-package}
-\title{MolgenisAuth: OpenID Authentication Methods}
+\title{MolgenisAuth: 'OpenID Connect' Discovery and Authentication}
 \description{
-Discover OpenID Connect endpoints and authenticate
-    using device flow. Used by MOLGENIS clients.
+Discover 'OpenID Connect' endpoints and authenticate
+    using device flow. Used by 'MOLGENIS' packages.
 }
 \seealso{
 Useful links:
