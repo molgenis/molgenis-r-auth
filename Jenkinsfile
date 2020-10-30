@@ -152,7 +152,7 @@ pipeline {
             }
             post {
                 success {
-                    hubotSend(message:  ":confetti_ball: Released ${PACKAGE} v${TAG}. See https://github.com/${REPOSITORY}/releases/tag/v${TAG}", status:'SUCCESS')
+                    molgenisSlack(message: ":confetti_ball: Released ${PACKAGE} v${TAG}. See https://github.com/${REPOSITORY}/releases/tag/v${TAG}", color:'good')
                 }
             }
         }
