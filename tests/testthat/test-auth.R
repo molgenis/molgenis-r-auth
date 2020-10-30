@@ -60,7 +60,7 @@ test_that("device flow retrieves token", {
   client_id <- "6fca9d08-c514-11ea-87d0-0242ac130003"
   with_mock(
     result <- device_flow_auth(endpoint, client_id),
-    "MolgenisAuth:::.browseURL" = browse,
+    "MolgenisAuth:::.browse_url" = browse,
     "httr::RETRY" = httr_retry,
     "httr::POST" = httr_post,
     "httr::content" = httr_content
@@ -93,7 +93,12 @@ test_that("device flow retrieves token", {
     )
   )
 
-  expect_args(browse,
-              1,
-              "https://example.org/oauth2/device?code=D4S5CVQ&client_id=6fca9d08-c514-11ea-87d0-0242ac130003")
+  expect_args(
+    browse,
+    1,
+    paste0(
+      "https://example.org/oauth2/device",
+      "?code=D4S5CVQ&client_id=6fca9d08-c514-11ea-87d0-0242ac130003"
+    )
+  )
 })

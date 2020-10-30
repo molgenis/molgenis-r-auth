@@ -83,7 +83,7 @@ device_flow_auth <-
       verification_url,
       "client_id", client_id
     )
-    .browseURL(verification_url)
+    .browse_url(verification_url)
 
     response <- httr::RETRY(
       url = endpoint$access,
@@ -103,6 +103,6 @@ device_flow_auth <-
     return(httr::content(response))
   }
 
-.browseURL <- function(url) {
+.browse_url <- function(url) {
   utils::browseURL(url)
 }
