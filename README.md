@@ -1,7 +1,7 @@
-[![Build Status](https://jenkins.dev.molgenis.org/buildStatus/icon?job=molgenis%2Fmolgenis-r-auth%2Fmaster)](https://jenkins.dev.molgenis.org/job/molgenis/job/molgenis-r-auth/job/master/)
+[![Build Status](https://travis-ci.org/molgenis/molgenis-r-auth.svg?branch=master)](https://travis-ci.org/molgenis/molgenis-r-auth)
 [![codecov](https://codecov.io/gh/molgenis/molgenis-r-auth/branch/master/graph/badge.svg)](https://codecov.io/gh/molgenis/molgenis-r-auth)
 
-# Molgenis R Authentication library
+# OpenID Authentication Methods
 This library can be used to discover and authenticate against an OpenID server. We have tested it using [fusionauth](https://fusionauth.io/).
 
 ## Installation
