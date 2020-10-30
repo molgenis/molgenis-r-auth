@@ -2,7 +2,7 @@ Package: MolgenisAuth
 Title: OpenID Authentication Methods
 Description: Discover OpenID Connect endpoints and authenticate
     using device flow. Used by MOLGENIS clients.
-Version: 0.0.7.9001
+Version: 0.0.7.9002
 Authors@R: 
     c(person(given = "Fleur",
              family = "Kelpin",
