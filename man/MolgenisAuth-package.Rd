@@ -12,9 +12,9 @@ Discover 'OpenID Connect' endpoints and authenticate
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/molgenis/molgenis-r-auth}
-  \item \url{https://molgenis.github.io/molgenis-r-auth}
-  \item Report bugs at \url{https://github.com/molgenis/molgenis-r-auth/issues}
+  \item \url{https://github.com/molgenis/molgenis-r-auth/}
+  \item \url{https://molgenis.github.io/molgenis-r-auth/}
+  \item Report bugs at \url{https://github.com/molgenis/molgenis-r-auth/issues/}
 }
 
 }
