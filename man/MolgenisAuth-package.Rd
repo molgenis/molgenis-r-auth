@@ -4,9 +4,10 @@
 \name{MolgenisAuth-package}
 \alias{MolgenisAuth}
 \alias{MolgenisAuth-package}
-\title{MolgenisAuth: Authentication Utils}
+\title{MolgenisAuth: OpenID Authentication Methods}
 \description{
-Helps the user authenticate.
+Discover OpenID Connect endpoints and authenticate
+    using device flow. Used by MOLGENIS clients.
 }
 \seealso{
 Useful links:
@@ -18,7 +19,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: FDL Kelpin \email{f.kelpin@umcg.nl} (\href{https://orcid.org/0000-0003-1527-5130}{ORCID})
+\strong{Maintainer}: Fleur Kelpin \email{f.kelpin@umcg.nl} (\href{https://orcid.org/0000-0003-1527-5130}{ORCID})
+
+Authors:
+\itemize{
+  \item Tommy de Boer \email{t.de.boer01@umcg.nl} (\href{https://orcid.org/0000-0002-4492-7225}{ORCID})
+  \item Sido Haakma \email{s.haakma@rug.nl} (\href{https://orcid.org/0000-0003-1278-9144}{ORCID})
+}
 
 }
 \keyword{internal}

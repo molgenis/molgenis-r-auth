@@ -1,8 +1,10 @@
 Package: MolgenisAuth
-Title: Authentication Utils
+Title: OpenID Authentication Methods
+Description: Discover OpenID Connect endpoints and authenticate
+    using device flow. Used by MOLGENIS clients.
 Version: 0.0.6.9002
 Authors@R: 
-    c(person(given = "FDL",
+    c(person(given = "Fleur",
              family = "Kelpin",
              role = c("aut", "cre"),
              email = "f.kelpin@umcg.nl",
@@ -17,7 +19,10 @@ Authors@R:
              role = c("aut"),
              email = "s.haakma@rug.nl",
              comment = c(ORCID = "0000-0003-1278-9144")))
-Description: Helps the user authenticate.
+Author: Fleur Kelpin [aut, cre] (<https://orcid.org/0000-0003-1527-5130>),
+    Tommy de Boer [aut] (<https://orcid.org/0000-0002-4492-7225>),
+    Sido Haakma [aut] (<https://orcid.org/0000-0003-1278-9144>)
+Maintainer: Fleur Kelpin <f.kelpin@umcg.nl>
 Imports: httr (>= 1.4.1), urltools
 URL: https://github.com/molgenis/molgenis-r-auth,
   https://molgenis.github.io/molgenis-r-auth
