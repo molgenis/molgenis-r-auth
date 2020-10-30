@@ -1,6 +1,12 @@
 # CRAN Comments
 
-## Test environments
+## 0.0.12: Second attempt at initial submission
+
+The URLs in the DESCRIPTION were missing trailing `/`-es.
+Fixed them.
+
+## 0.0.11: Initial submission
+### Test environments
 * local OS X install, R 4.0.2
 * Travis CI xenial
   * oldrel: R 3.6.3
@@ -8,7 +14,7 @@
   * devel: R Under development (unstable) (2020-10-29 r79387)
 * win-builder (release)
 
-## R CMD check results
+### R CMD check results
 There were no ERRORs and WARNINGs.
 There was one NOTE:
 ```
@@ -20,7 +26,7 @@ This is the first of three new submissions of our MOLGENIS Armadillo
 DataSHIELD packages. This submission contains the authentication methods
 that both other packages use to allow the user to authenticate.
 
-## Reverse dependencies
+### Reverse dependencies
 There are currently no downstream dependencies for this package.
 The other two packages, depending on this package, will be:
 * DSMolgenisArmadillo
