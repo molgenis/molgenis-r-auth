@@ -3,3 +3,5 @@
 ^LICENSE\.md$
 ^Jenkinsfile$
 ^.travis.yml$
+^cran-comments\.md$
+^README\.Rmd$
