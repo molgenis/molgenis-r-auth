@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">MolgenisAuth</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
       </span>
     </div>
 
@@ -46,6 +46,9 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -68,39 +71,50 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-
-<div id="openid-authentication-methods" class="section level1">
+<hr>
+<div id="output-github_document" class="section level2">
+<h2 class="hasAnchor">
+<a href="#output-github_document" class="anchor"></a>output: github_document</h2>
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+</div>
+<div id="molgenisauth" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#openid-authentication-methods" class="anchor"></a>OpenID Authentication Methods</h1></div>
-<p>This library can be used to discover and authenticate against an OpenID server. We have tested it using <a href="https://fusionauth.io/">fusionauth</a>.</p>
+<a href="#molgenisauth" class="anchor"></a>MolgenisAuth</h1></div>
+<!-- badges: start -->
+
+<p>The goal of MolgenisAuth is to discover and authenticate against an OpenID Connect server. We have tested it using <a href="https://fusionauth.io/">fusionauth</a>.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the package using the following code.</p>
-<pre class="{r}"><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("MolgenisAuth", repos = "https://registry.molgenis.org", dependencies = TRUE)</a></code></pre>
+<p>You can install the released version of MolgenisAuth from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"MolgenisAuth"</span>)</a></code></pre></div>
+<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"molgenis/molgenis-r-auth"</span>)</a></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p>You can use 2 endpoints</p>
-<ul>
-<li>
-<p><code>discover</code></p>
-<p>Is a discovery endpoint which should serve and issuer URL and a client ID</p>
-</li>
-<li>
-<p><code>device_flow_auth</code></p>
-<p>At this moment we support only the <code>device_flow</code>, Which means authentication using a code, which in return resolves a JWT token.</p>
-</li>
-</ul>
-<p>You can run these commands using the following examples:</p>
-<p><em>Request endpoint</em> <code>{r, eval = FALSE} endpoint &lt;- discover("https://auth.molgenis.org")</code></p>
-<p><em>Request JWT token</em> <code>{r, eval = FALSE} device_flow_auth(endpoint, "b396233b-cdb2-449e-ac5c-a0d28b38f791")</code></p>
+<p>To discover endpoint URLs on an OpenID Connect authentication server:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MolgenisAuth)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">endpoint &lt;-<span class="st"> </span><span class="kw"><a href="reference/discover.html">discover</a></span>(<span class="st">"https://auth.molgenis.org"</span>)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">endpoint</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; &lt;oauth_endpoint&gt;</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt;  authorize: https://auth.molgenis.org/oauth2/authorize</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;  access:    https://auth.molgenis.org/oauth2/token</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;  user:      https://auth.molgenis.org/oauth2/userinfo</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;  device:    https://auth.molgenis.org/oauth2/device_authorize</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;  logout:    https://auth.molgenis.org/oauth2/logout</span></a></code></pre></div>
+<p>Using this endpoint, you can then authenticate using the device flow. This will open a browser window so you can authenticate with the authentication server.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">credentials &lt;-<span class="st"> </span><span class="kw"><a href="reference/device_flow_auth.html">device_flow_auth</a></span>(endpoint, <span class="st">"b396233b-cdb2-449e-ac5c-a0d28b38f791"</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [1] "We're opening a browser so you can log in with code PB55N6"</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">credentials<span class="op">$</span>id_token</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; [1] "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlcwbmltejhpYU9DLW16OXNaTVRiVzRfbFdMMCJ9.eyJhdWQiOiJiMzk2MjMzYi1jZGIyLTQ0OWUtYWM1Yy1hMGQyOGIzOGY3OTEiLCJleHAiOjE2MDQwODY5ODIsImlhdCI6MTYwNDA4MzM4MiwiaXNzIjoiaHR0cHM6Ly9hdXRoLm1vbGdlbmlzLm9yZyIsInN1YiI6ImQ4OTk1OTc2LWU4ZDgtNDM5MC04MzliLTAwN2EzODJmYzEyYiIsImp0aSI6ImVkNDAyYzg2LTYyYWUtNGM3Ny1iYTI2LWUxODdlNjlmMTc3MyIsImF1dGhlbnRpY2F0aW9uVHlwZSI6IlBBU1NXT1JEIiwiZW1haWwiOiJmLmtlbHBpbkB1bWNnLm5sIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJmMU5vSHdVc2JKbGRIUDdYcWdLb3pBIiwiYXBwbGljYXRpb25JZCI6ImIzOTYyMzNiLWNkYjItNDQ5ZS1hYzVjLWEwZDI4YjM4Zjc5MSIsInJvbGVzIjpbIlNVIl0sInBvbGljeSI6InJlYWR3cml0ZSJ9.alXoUguaB8j1Oj4n42KI7INfYC3Vit-8rgpdl2qm-6DB3A3afTomqLx_D4VEENaVEjeiGGpqTvxkVaBUKrYf09mgASF35vK1-fNWMKl2yKxy4JppBc916B9PVoacmNvZ7gez_LWXX_ZLKl4EzYd836_fwenW8RtfQbGsoIR9tRL-2c0cJOOz0lln9FlP4gG3JYf1Leq_hVA168qos7SuXWZiyk38eE-VvjcR2PxNf9hAZ8XraFiWvbEMfwaynhtfWTJBT74jY_tEuyiKQiFB-O76sr-gUWrMtsYQCLLrz_3R_txvF--suIr9AnEfRECvIgW8CjiSq-kGIFPO3Ogq3w"</span></a></code></pre></div>
 </div>
 <div id="support" class="section level2">
 <h2 class="hasAnchor">
 <a href="#support" class="anchor"></a>Support</h2>
-<p>We appreciate help, so do not be shy and file pull-requests on things that are broken or file a bug report.</p>
+<p>We appreciate help, so do not be shy and file pull-requests for things that are broken or file a bug report.</p>
 </div>
 </div>
 
@@ -135,8 +149,8 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/molgenis/molgenis-r-auth"><img src="https://travis-ci.org/molgenis/molgenis-r-auth.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://codecov.io/gh/molgenis/molgenis-r-auth"><img src="https://codecov.io/gh/molgenis/molgenis-r-auth/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://travis-ci.org/molgenis/molgenis-r-auth"><img src="https://travis-ci.org/molgenis/molgenis-r-auth.svg?branch=master" alt="Travis build status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=MolgenisAuth"><img src="https://www.r-pkg.org/badges/version/MolgenisAuth" alt="CRAN status"></a></li>
 </ul>
 </div>
 </div>

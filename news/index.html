@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Authenticate using device flow — device_flow_auth • MolgenisAuth</title>
+<title>Changelog • MolgenisAuth</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,7 @@
 
 
 
-<meta property="og:title" content="Authenticate using device flow — device_flow_auth" />
-<meta property="og:description" content="Get an ID token using the
-OpenIDConnect Device Flow." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -57,7 +54,7 @@ OpenIDConnect Device Flow." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -109,56 +106,25 @@ OpenIDConnect Device Flow." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Authenticate using device flow</h1>
-    <small class="dont-index">Source: <a href='https://github.com/molgenis/molgenis-r-auth/blob/master/R/auth.R'><code>R/auth.R</code></a></small>
-    <div class="hidden name"><code>device_flow_auth.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/molgenis/molgenis-r-auth/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    <p>Get an ID token using the
-<a href='https://tools.ietf.org/html/rfc8628'>OpenIDConnect Device Flow</a>.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>device_flow_auth</span>(<span class='no'>endpoint</span>, <span class='no'>client_id</span>, <span class='kw'>scopes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"openid"</span>, <span class='st'>"offline_access"</span>))</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>endpoint</th>
-      <td><p>An <code>oauth_endpoint</code> with a device endpoint
-specified in it</p></td>
-    </tr>
-    <tr>
-      <th>client_id</th>
-      <td><p>The client ID for which the token should be obtained</p></td>
-    </tr>
-    <tr>
-      <th>scopes</th>
-      <td><p>the requested scopes, default to
-<code><a href='https://rdrr.io/r/base/c.html'>c("openid", "offline_access")</a></code></p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>The credentials retrieved from the token endpoint</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>endpoint</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='discover.html'>discover</a></span>(<span class='st'>"https://auth.molgenis.org"</span>)
-<span class='fu'>device_flow_auth</span>(<span class='no'>endpoint</span>, <span class='st'>"b396233b-cdb2-449e-ac5c-a0d28b38f791"</span>)
-}</div></pre>
+    <div id="molgenisauth-0-0-9" class="section level1">
+<h1 class="page-header">
+<a href="#molgenisauth-0-0-9" class="anchor"></a>MolgenisAuth 0.0.9</h1>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#molgenisauth-0-0-9">0.0.9</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
 
