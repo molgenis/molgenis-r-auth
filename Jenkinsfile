@@ -29,10 +29,10 @@ pipeline {
                 script {
                     env.PACKAGE = sh(script: "grep Package DESCRIPTION | head -n1 | cut -d':' -f2", returnStdout: true).trim()
                 }
-                sh "tlmgr install tc"
                 sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
                 sh "git fetch --tags"
                 container('r') {
+                    sh "tlmgr install tc"
                     sh "Rscript -e \"git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')\""
                     sh "install2.r remotes urltools httr pkgdown mockery"
                     sh "installGithub.r fdlk/lintr"
