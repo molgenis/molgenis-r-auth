@@ -80,7 +80,7 @@ pipeline {
                     sh "git commit -a -m 'Increment version number'"
                     sh "echo 'Building ${PACKAGE} v${TAG}'"
                     sh "R CMD build ."
-                    sh "R -e 'devtools::check_built(path = \'${PACKAGE}_${TAG}.tar.gz\', remote=TRUE, force_suggests = TRUE)'"
+                    sh "R -e 'devtools::check_built(path = \"${PACKAGE}_${TAG}.tar.gz\"", remote=TRUE, force_suggests = TRUE)'"
                     sh "Rscript -e 'quit(save = \"no\", status = length(lintr::lint_package(linters=lintr::with_defaults(object_usage_linter = NULL))))'"
                 }
             }
@@ -141,7 +141,7 @@ pipeline {
                     sh "git commit -a -m 'Increment version number'"
                     sh "echo \"Releasing ${PACKAGE} v${TAG}\""
                     sh "R CMD build ."
-                    sh "R -e 'devtools::check_built(path = \'${PACKAGE}_${TAG}.tar.gz\', remote=TRUE, force_suggests = TRUE)'"
+                    sh "R -e 'devtools::check_built(path = \"${PACKAGE}_${TAG}.tar.gz\", remote=TRUE, force_suggests = TRUE)'"
                     container('curl') {
                         sh "set +x; curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file ${PACKAGE}_${TAG}.tar.gz ${REGISTRY}/src/contrib/${PACKAGE}_${TAG}.tar.gz"
                     }
