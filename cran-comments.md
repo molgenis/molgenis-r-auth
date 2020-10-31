@@ -1,5 +1,9 @@
 # CRAN Comments
 
+## 0.0.14: Fourth attempt at initial submission
+
+Updated Authors in DESCRIPTION
+
 ## 0.0.13: Third attempt at initial submission
 
 Added copyright holder
