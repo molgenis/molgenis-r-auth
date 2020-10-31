@@ -2,7 +2,8 @@
 
 ## 0.0.14: Fourth attempt at initial submission
 
-Updated Authors in DESCRIPTION
+* Updated Authors in DESCRIPTION
+* Fixed README.Rmd which was complaining about a missing title
 
 ## 0.0.13: Third attempt at initial submission
 
