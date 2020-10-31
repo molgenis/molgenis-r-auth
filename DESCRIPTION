@@ -24,7 +24,8 @@ Authors@R:
              email = "molgenis-support@umcg.nl"))
 Author: Fleur Kelpin [aut, cre] (<https://orcid.org/0000-0003-1527-5130>),
     Tommy de Boer [aut] (<https://orcid.org/0000-0002-4492-7225>),
-    Sido Haakma [aut] (<https://orcid.org/0000-0003-1278-9144>)
+    Sido Haakma [aut] (<https://orcid.org/0000-0003-1278-9144>),
+    MOLGENIS org [cph, fnd]
 Maintainer: Fleur Kelpin <f.kelpin@umcg.nl>
 Imports: httr (>= 1.4.0), urltools (>= 1.7.0)
 URL: https://github.com/molgenis/molgenis-r-auth/,

@@ -27,5 +27,10 @@ Authors:
   \item Sido Haakma \email{s.haakma@rug.nl} (\href{https://orcid.org/0000-0003-1278-9144}{ORCID})
 }
 
+Other contributors:
+\itemize{
+  \item MOLGENIS org \email{molgenis-support@umcg.nl} [copyright holder, funder]
+}
+
 }
 \keyword{internal}
