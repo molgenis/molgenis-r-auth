@@ -29,8 +29,7 @@ pipeline {
                 script {
                     env.PACKAGE = sh(script: "grep Package DESCRIPTION | head -n1 | cut -d':' -f2", returnStdout: true).trim()
                 }
-                sh "apt-get update"
-                sh "apt-get install texlive-fonts-recommended"
+                sh "tlmgr install tc"
                 sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
                 sh "git fetch --tags"
                 container('r') {
