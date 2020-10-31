@@ -34,7 +34,7 @@ pipeline {
                 container('r') {
                     sh "tlmgr install collection-fontsrecommended"
                     sh "Rscript -e \"git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')\""
-                    sh "install2.r remotes urltools httr pkgdown mockery"
+                    sh "install2.r devtools urltools httr pkgdown mockery"
                     sh "installGithub.r fdlk/lintr"
                     sh "mkdir -m 700 -p /root/.ssh"
                     sh "ssh-keyscan -H -t rsa github.com  > ~/.ssh/known_hosts"
@@ -50,8 +50,7 @@ pipeline {
                     script {
                         env.TAG = sh(script: "grep Version DESCRIPTION | head -n1 | cut -d':' -f2", returnStdout: true).trim()
                     }
-                    sh "R CMD build ."
-                    sh "R CMD check --as-cran ${PACKAGE}_${TAG}.tar.gz"
+                    sh "R -e 'devtools::check(remote=TRUE, force_suggests = TRUE)'"
                 }
             }
             post {
@@ -80,8 +79,7 @@ pipeline {
                     }
                     sh "git commit -a -m 'Increment version number'"
                     sh "echo 'Building ${PACKAGE} v${TAG}'"
-                    sh "R CMD build ."
-                    sh "R CMD check --as-cran ${PACKAGE}_${TAG}.tar.gz"
+                    sh "R -e 'devtools::check(remote=TRUE, force_suggests = TRUE)'"
                     sh "Rscript -e 'quit(save = \"no\", status = length(lintr::lint_package(linters=lintr::with_defaults(object_usage_linter = NULL))))'"
                 }
             }
@@ -141,8 +139,7 @@ pipeline {
                     }
                     sh "git commit -a -m 'Increment version number'"
                     sh "echo \"Releasing ${PACKAGE} v${TAG}\""
-                    sh "R CMD build ."
-                    sh "R CMD check --as-cran ${PACKAGE}_${TAG}.tar.gz"
+                    sh "R -e 'devtools::check(remote=TRUE, force_suggests = TRUE)'"
                     container('curl') {
                         sh "set +x; curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file ${PACKAGE}_${TAG}.tar.gz ${REGISTRY}/src/contrib/${PACKAGE}_${TAG}.tar.gz"
                     }
