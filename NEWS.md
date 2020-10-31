@@ -1,4 +1,4 @@
-# MolgenisAuth (development version)
+# MolgenisAuth 0.0.13
 
 # MolgenisAuth 0.0.12
 
