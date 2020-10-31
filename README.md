@@ -1,9 +1,17 @@
+---
+title: "MolgenisAuth"
+date: "2020-10-31"
+output: 
+  github_document
+---
 
 # MolgenisAuth
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/molgenis/molgenis-r-auth.svg?branch=master)](https://travis-ci.org/molgenis/molgenis-r-auth)
 [![CRAN status](https://www.r-pkg.org/badges/version/MolgenisAuth)](https://CRAN.R-project.org/package=MolgenisAuth)
+
+
 [![codecov](https://codecov.io/gh/molgenis/molgenis-r-auth/branch/master/graph/badge.svg)](https://codecov.io/gh/molgenis/molgenis-r-auth)
 <!-- badges: end -->
 
@@ -49,9 +57,9 @@ authentication server.
 
 ```r
 credentials <- device_flow_auth(endpoint, "b396233b-cdb2-449e-ac5c-a0d28b38f791")
-#> [1] "We're opening a browser so you can log in with code LPRPRL"
+#> [1] "We're opening a browser so you can log in with code GNLYRS"
 credentials$id_token
-#> [1] "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlcwbmltejhpYU9DLW16OXNaTVRiVzRfbFdMMCJ9.eyJhdWQiOiJiMzk2MjMzYi1jZGIyLTQ0OWUtYWM1Yy1hMGQyOGIzOGY3OTEiLCJleHAiOjE2MDQxNjY1ODAsImlhdCI6MTYwNDE2Mjk4MCwiaXNzIjoiaHR0cHM6Ly9hdXRoLm1vbGdlbmlzLm9yZyIsInN1YiI6ImQ4OTk1OTc2LWU4ZDgtNDM5MC04MzliLTAwN2EzODJmYzEyYiIsImp0aSI6ImYwNGZhMWU0LWU0MGItNGUwMS1iZGU3LWE0MjRmZWVjMmUyNSIsImF1dGhlbnRpY2F0aW9uVHlwZSI6IlBBU1NXT1JEIiwiZW1haWwiOiJmLmtlbHBpbkB1bWNnLm5sIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJSU1cxOWJSenhXYm1naUp0cXoyOWtRIiwiYXBwbGljYXRpb25JZCI6ImIzOTYyMzNiLWNkYjItNDQ5ZS1hYzVjLWEwZDI4YjM4Zjc5MSIsInJvbGVzIjpbIlNVIl0sInBvbGljeSI6InJlYWR3cml0ZSJ9.NRuQVi1x9uYEOoQUfzDIXkICrFVNcZi0N9p7oHG45x1__FZa9B_udMCJQLcoIrZobgvhw1U0F2aGJ5UGYt2rckNjrs6vafDExJLfwvh_IKaCPL8D78eNRch4-5ss7wBGD_ho_htdT3jaSJgjzeptj46p678vvOSADCr7ZL2-72E4GTd2EItGp_6soaJztOUVKlrs01tl_uhiLKapCOnn32FzocjqKZtZIxwjwu_qTiZSwWo_f1n2gURAX7N4mzNPCUNdl22Ry2KMJkWJhtQN2w9_oAXe-l70LaavYqTfEzoQTfG14u4t2LEDt_CKn5qLG1i4dS7yYI_dPIQKUUlXEA"
+#> [1] "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlcwbmltejhpYU9DLW16OXNaTVRiVzRfbFdMMCJ9.eyJhdWQiOiJiMzk2MjMzYi1jZGIyLTQ0OWUtYWM1Yy1hMGQyOGIzOGY3OTEiLCJleHAiOjE2MDQxNjgwODMsImlhdCI6MTYwNDE2NDQ4MywiaXNzIjoiaHR0cHM6Ly9hdXRoLm1vbGdlbmlzLm9yZyIsInN1YiI6ImQ4OTk1OTc2LWU4ZDgtNDM5MC04MzliLTAwN2EzODJmYzEyYiIsImp0aSI6IjI2ODZlYzhhLWY5YTctNDc3Ni1hODdhLTU4NDY3ZGZmZDUzYiIsImF1dGhlbnRpY2F0aW9uVHlwZSI6IlBBU1NXT1JEIiwiZW1haWwiOiJmLmtlbHBpbkB1bWNnLm5sIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJieGRfRjE2OElhWlRfajZzQ1BNV2xnIiwiYXBwbGljYXRpb25JZCI6ImIzOTYyMzNiLWNkYjItNDQ5ZS1hYzVjLWEwZDI4YjM4Zjc5MSIsInJvbGVzIjpbIlNVIl0sInBvbGljeSI6InJlYWR3cml0ZSJ9.b11vq77fEc7GEA57dxNv2XhelcfHjDgGHrH5v7SiSlWdEdQjZwQzL8MBUjBvRuLzKNOrG02mxMr2sXYb_WqT_6qzz8InaGR5sR5KarA7OZnrkfHn6jPHtQ_fm9eXd4OVHNGoAVh9sUtVSNYF9qa7BGw4DYPiTYihUM4Jk0GWxqhxB0_RbxAQ7ipA0v4RNXeo1Z1a2S9HTLvi07af7_p80NZFE999LId86QC5r49_8osuMoCHLSNrwQw18zI4L_UpTgtZhiyONm_r5f5uvJqBqHC8TbZl8L7k8LFiqdkTgnQZDJNcJ7r6dgQnwAbdvy_mar0xd_en5noA6ve-9t3zUA"
 ```
 
 ## Support
