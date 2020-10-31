@@ -1,3 +1,7 @@
+---
+title: "NEWS"
+---
+
 # MolgenisAuth (development version)
 
 # MolgenisAuth 0.0.13
