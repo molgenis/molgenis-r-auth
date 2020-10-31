@@ -1,5 +1,9 @@
 # CRAN Comments
 
+## 0.0.13: Third attempt at initial submission
+
+Added copyright holder
+
 ## 0.0.12: Second attempt at initial submission
 
 The URLs in the DESCRIPTION were missing trailing `/`-es.
