@@ -4,8 +4,7 @@ MolgenisAuth
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.com/molgenis/molgenis-r-auth.svg?branch=master)](https://travis-ci.com/molgenis/molgenis-r-auth)
+[![Travis build status](https://app.travis-ci.com/molgenis/molgenis-r-auth.svg?branch=master)](https://app.travis-ci.com/molgenis/molgenis-r-auth.svg?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/MolgenisAuth)](https://CRAN.R-project.org/package=MolgenisAuth)
 [![codecov](https://codecov.io/gh/molgenis/molgenis-r-auth/branch/master/graph/badge.svg)](https://codecov.io/gh/molgenis/molgenis-r-auth)
