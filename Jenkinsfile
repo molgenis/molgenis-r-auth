@@ -11,11 +11,6 @@ pipeline {
     }
     stages {
         stage('Prepare') {
-            when {
-                not {
-                    changelog 'Increment version number'
-                }
-            }
             steps {
                 container('vault') {
                     script {
