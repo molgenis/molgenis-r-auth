@@ -51,7 +51,7 @@ pipeline {
                     script {
                         env.TAG = sh(script: "grep Version DESCRIPTION | head -n1 | cut -d':' -f2", returnStdout: true).trim()
                     }
-                    sh "Rscript -e 'devtools::check(remote=TRUE, force_suggests = TRUE)'"
+                    sh "Rscript -e 'devtools::check(remote=TRUE, force_suggests = TRUE, error_on=\"error\")'"
                 }
             }
             post {
