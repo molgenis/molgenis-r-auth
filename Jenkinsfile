@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            label 'r-4.0.3'
+            inheritFrom 'r-4.0.3'
         }
     }
     environment {
@@ -11,15 +11,11 @@ pipeline {
     }
     stages {
         stage('Prepare') {
-            when {
-                not {
-                    changelog 'Increment version number'
-                }
-            }
             steps {
                 container('vault') {
                     script {
                         env.GITHUB_TOKEN = sh(script: 'vault read -field=value secret/ops/token/github', returnStdout: true)
+                        env.GITHUB_PAT = env.GITHUB_TOKEN
                         env.GITHUB_DEPLOY_PRIVATE_KEY_BASE64 = sh(script: 'vault read -field=ssh_private_base64 secret/ops/account/github', returnStdout: true)
                         env.CODECOV_TOKEN = sh(script: 'vault read -field=molgenis-r-auth secret/ops/token/codecov', returnStdout: true)
                         env.NEXUS_USER = sh(script: 'vault read -field=username secret/ops/account/nexus', returnStdout: true)
@@ -33,9 +29,9 @@ pipeline {
                 sh "git fetch --tags"
                 container('r') {
                     sh "tlmgr install collection-fontsrecommended"
-                    sh "Rscript -e \"git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')\""
-                    sh "install2.r devtools urltools httr pkgdown mockery"
+                    sh "install2.r devtools urltools httr pkgdown mockery git2r"
                     sh "installGithub.r fdlk/lintr"
+                    sh "Rscript -e \"git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')\""
                     sh "mkdir -m 700 -p /root/.ssh"
                     sh "ssh-keyscan -H -t rsa github.com  > ~/.ssh/known_hosts"
                 }
@@ -50,7 +46,7 @@ pipeline {
                     script {
                         env.TAG = sh(script: "grep Version DESCRIPTION | head -n1 | cut -d':' -f2", returnStdout: true).trim()
                     }
-                    sh "Rscript -e 'devtools::check(remote=TRUE, force_suggests = TRUE)'"
+                    sh "Rscript -e 'devtools::check(remote=TRUE, force_suggests = TRUE, error_on=\"error\")'"
                 }
             }
             post {
