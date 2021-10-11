@@ -1,6 +1,6 @@
 # CRAN Comments
 
-## 0.0.18: Fix codecov links
+## 0.0.18: Remove LazyData is true
 * Remove LazyData is true. There is no data directory to load.
 
 ## 0.0.17: Fix codecov links
