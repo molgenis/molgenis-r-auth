@@ -1,5 +1,8 @@
 # CRAN Comments
 
+## 0.0.18: Fix codecov links
+* Remove LazyData is true. There is no data directory to load.
+
 ## 0.0.17: Fix codecov links
 * Remove redirect from codecov badge link
 
