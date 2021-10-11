@@ -7,7 +7,7 @@ MolgenisAuth
 [![Travis build status](https://api.travis-ci.com/molgenis/molgenis-r-auth.svg?branch=master)](https://api.travis-ci.com/molgenis/molgenis-r-auth.svg?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/MolgenisAuth)](https://CRAN.R-project.org/package=MolgenisAuth)
-[![codecov](https://codecov.io/gh/molgenis/molgenis-r-auth/branch/master/graph/badge.svg)](https://codecov.io/gh/molgenis/molgenis-r-auth)
+[![codecov](https://codecov.io/gh/molgenis/molgenis-r-auth/branch/master/graph/badge.svg?token=5Y96e0ULTk)](https://app.codecov.io/gh/molgenis/molgenis-r-auth)
 <!-- badges: end -->
 
 The goal of MolgenisAuth is to discover and authenticate against an

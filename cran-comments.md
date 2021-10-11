@@ -1,5 +1,8 @@
 # CRAN Comments
 
+## 0.0.17: Fix codecov links
+* Remove redirect from codecov badge link
+
 ## 0.0.16: Fix travis links
 * Remove redirect from travis badge link
 
