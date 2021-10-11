@@ -1,5 +1,9 @@
 # CRAN Comments
 
+## 0.0.15: Change maintainer
+* Make Sido maintainer
+* Fix travis badge location
+
 ## 0.0.14: Fourth attempt at initial submission
 
 * Updated Authors in DESCRIPTION
