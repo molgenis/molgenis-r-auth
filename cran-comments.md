@@ -1,5 +1,8 @@
 # CRAN Comments
 
+## 0.0.16: Fix travis links
+* Remove redirect from travis badge link
+
 ## 0.0.15: Change maintainer
 * Make Sido maintainer
 * Fix travis badge location
