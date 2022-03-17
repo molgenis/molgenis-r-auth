@@ -1,7 +1,10 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom 'r-4.0.3'
+            // the shared pod template defined on the Jenkins server config
+            inheritFrom 'shared'
+            // r pod template defined in molgenis/molgenis-jenkins-pipeline repository
+            yaml libraryResource("pod-templates/r-4_0_3.yaml")
         }
     }
     environment {
