@@ -1,5 +1,8 @@
 # CRAN Comments
 
+## 0.0.19: Change maintainer
+* Make Mariska maintainer
+
 ## 0.0.18: Remove LazyData is true
 * Remove LazyData is true. There is no data directory to load.
 
