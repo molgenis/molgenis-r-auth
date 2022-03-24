@@ -2,7 +2,7 @@ Package: MolgenisAuth
 Title: 'OpenID Connect' Discovery and Authentication
 Description: Discover 'OpenID Connect' endpoints and authenticate
     using device flow. Used by 'MOLGENIS' packages.
-Version: 0.0.19.9002
+Version: 0.0.20
 Authors@R: 
     c(
       person(given = "Mariska",
