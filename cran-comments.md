@@ -1,5 +1,8 @@
 # CRAN Comments
 
+## 0.0.20: Fix maintainer
+* Add Mariska to authors
+
 ## 0.0.19: Change maintainer
 * Make Mariska maintainer
 
