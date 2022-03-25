@@ -5,11 +5,6 @@ Description: Discover 'OpenID Connect' endpoints and authenticate
 Version: 0.0.19.9000
 Authors@R: 
     c(
-      person(given = "Mariska",
-             family = "Slofstra",
-             role = c("aut", "cre"),
-             email = "m.k.slofstra@umcg.nl",
-             comment = c(ORCID = "0000-0002-0400-0468")),
       person(given = "Fleur",
              family = "Kelpin",
              role = c("aut"),
@@ -25,6 +20,11 @@ Authors@R:
              role = c("aut"),
              email = "s.haakma@rug.nl",
              comment = c(ORCID = "0000-0003-1278-9144")),
+      person(given = "Mariska",
+             family = "Slofstra",
+             role = c("aut", "cre"),
+             email = "m.k.slofstra@umcg.nl",
+             comment = c(ORCID = "0000-0002-0400-0468")),
       person(given = "MOLGENIS org",
              role = c("cph", "fnd"),
              email = "molgenis-support@umcg.nl"))
