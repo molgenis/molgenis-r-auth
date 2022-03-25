@@ -2,7 +2,7 @@ Package: MolgenisAuth
 Title: 'OpenID Connect' Discovery and Authentication
 Description: Discover 'OpenID Connect' endpoints and authenticate
     using device flow. Used by 'MOLGENIS' packages.
-Version: 0.0.19.9000
+Version: 0.0.20.9000
 Authors@R: 
     c(
       person(given = "Fleur",
@@ -30,7 +30,8 @@ Authors@R:
              email = "molgenis-support@umcg.nl"))
 Author: Fleur Kelpin [aut] (<https://orcid.org/0000-0003-1527-5130>),
     Tommy de Boer [aut] (<https://orcid.org/0000-0002-4492-7225>),
-    Sido Haakma [aut, cre] (<https://orcid.org/0000-0003-1278-9144>),
+    Sido Haakma [aut] (<https://orcid.org/0000-0003-1278-9144>),
+    Mariska Slofstra [aut, cre] (<https://orcid.org/0000-0002-0400-0468>),
     MOLGENIS org [cph, fnd]
 Maintainer: Mariska Slofstra <m.k.slofstra@umcg.nl>
 Imports: httr (>= 1.4.0), urltools (>= 1.7.0)
