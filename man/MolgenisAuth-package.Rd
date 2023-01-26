@@ -6,8 +6,7 @@
 \alias{MolgenisAuth-package}
 \title{MolgenisAuth: 'OpenID Connect' Discovery and Authentication}
 \description{
-Discover 'OpenID Connect' endpoints and authenticate
-    using device flow. Used by 'MOLGENIS' packages.
+Discover 'OpenID Connect' endpoints and authenticate using device flow. Used by 'MOLGENIS' packages.
 }
 \seealso{
 Useful links:
@@ -19,12 +18,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Sido Haakma \email{s.haakma@rug.nl} (\href{https://orcid.org/0000-0003-1278-9144}{ORCID})
+\strong{Maintainer}: Mariska Slofstra \email{m.k.slofstra@umcg.nl} (\href{https://orcid.org/0000-0002-0400-0468}{ORCID})
 
 Authors:
 \itemize{
   \item Fleur Kelpin \email{fleur@kelpin.nl} (\href{https://orcid.org/0000-0003-1527-5130}{ORCID})
   \item Tommy de Boer \email{t.de.boer01@umcg.nl} (\href{https://orcid.org/0000-0002-4492-7225}{ORCID})
+  \item Sido Haakma \email{s.haakma@rug.nl} (\href{https://orcid.org/0000-0003-1278-9144}{ORCID})
 }
 
 Other contributors:
