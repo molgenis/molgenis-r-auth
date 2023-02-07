@@ -16,8 +16,12 @@
 #' }
 #' @export
 discover <- function(auth_server) {
-  openid_config_url <- auth_server
-  urltools::path(openid_config_url) <- ".well-known/openid-configuration"
+  # ensure url ends with a single slash
+  auth_server_no_slash <- gsub("/$", "", auth_server)
+  auth_server <- paste0(auth_server_no_slash, "/")
+
+  # retrieve configuration
+  openid_config_url <- paste0(auth_server, ".well-known/openid-configuration")
   response <- httr::GET(openid_config_url)
   httr::stop_for_status(response, task = "discover OpenID configuration")
   configuration <- httr::content(response)
