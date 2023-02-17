@@ -1,4 +1,9 @@
 # CRAN Comments
+## 0.0.23: Fix CRAN comments
+* Fix CRAN comments
+
+## 0.0.22: Fix openid-configuration path
+* Fix open id-configuration path for Keycloak
 
 ## 0.0.21: Fix authors
 * Fix order of authors
