@@ -1,4 +1,7 @@
 # CRAN Comments
+## 0.0.25: Fix generate docs
+* Regenerate docs
+
 ## 0.0.24: Fix redirected URL in documentation
 * Fix redirected URL in auth documentation
 
