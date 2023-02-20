@@ -20,7 +20,7 @@ The credentials retrieved from the token endpoint
 }
 \description{
 Get an ID token using the
-\href{https://tools.ietf.org/html/rfc8628}{OpenIDConnect Device Flow}.
+\href{https://www.rfc-editor.org/rfc/rfc8628}{OpenIDConnect Device Flow}.
 }
 \examples{
 \dontrun{
