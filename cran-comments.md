@@ -1,4 +1,7 @@
 # CRAN Comments
+## 0.0.24: Fix redirected URL in documentation
+* Fix redirected URL in auth documentation
+
 ## 0.0.23: Fix CRAN comments
 * Fix CRAN comments
 

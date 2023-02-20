@@ -39,7 +39,7 @@ discover <- function(auth_server) {
 #' Authenticate using device flow
 #'
 #' Get an ID token using the
-#' \href{https://tools.ietf.org/html/rfc8628}{OpenIDConnect Device Flow}.
+#' \href{https://www.rfc-editor.org/rfc/rfc8628}{OpenIDConnect Device Flow}.
 #'
 #' @param endpoint An \code{\link{oauth_endpoint}} with a device endpoint
 #' specified in it
