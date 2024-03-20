@@ -60,13 +60,17 @@ discover <- function(auth_server) {
 #'
 #' @export
 device_flow_auth <-
-  function(endpoint, client_id, scopes = c("openid", "offline_access")) {
+  function(endpoint, client_id, scopes = c("openid", "offline_access"),
+           encode = c("json", "form"
+           )) {
+    encode <- match.arg(encode)
     stopifnot(
       inherits(endpoint, "oauth_endpoint"),
       is.character(client_id),
       is.character(endpoint$device)
     )
     response <- httr::POST(endpoint$device,
+      encode = encode,
       body = list(
         client_id = client_id,
         scope = paste(scopes, collapse = " ")
@@ -97,6 +101,7 @@ device_flow_auth <-
       pause_min = auth_res$interval,
       times = auth_res$expires_in / auth_res$interval,
       quiet = TRUE,
+      encode = encode,
       body = list(
         "client_id" = client_id,
         "grant_type" = "urn:ietf:params:oauth:grant-type:device_code",
