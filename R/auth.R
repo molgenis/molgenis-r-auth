@@ -61,8 +61,8 @@ discover <- function(auth_server) {
 #' @export
 device_flow_auth <-
   function(endpoint, client_id, scopes = c("openid", "offline_access"),
-           encode = c("json", "form"
-           )) {
+    encode = c("json", "form")
+  ) {
     encode <- match.arg(encode)
     stopifnot(
       inherits(endpoint, "oauth_endpoint"),
