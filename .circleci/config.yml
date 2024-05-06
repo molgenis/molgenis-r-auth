@@ -1,0 +1,125 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+    # specify the version you desire here
+    - image: rocker/verse:4.1.1
+    working_directory: ~/repo
+
+    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: large
+
+    steps:
+    - checkout
+
+    - run:
+        name: Prepare environment
+        command: |
+          apt-get update
+          apt-get install git curl ssh libcurl4-openssl-dev libssl-dev build-essential ninja-build cmake jq -y
+          git fetch --all --tags
+          git remote set-url origin https://${GITHUB_TOKEN}@github.com/molgenis/molgenis-r-auth.git
+
+    - run:
+        name: Install git semantic version bump tool
+        command: |
+          echo 'deb [trusted=yes] https://apt.fury.io/caarlos0/ /' | sudo tee /etc/apt/sources.list.d/caarlos0.list
+          sudo apt update
+          sudo apt install svu
+
+    - run:
+        name: Get new version number based on semantic commits and put in package description
+        command: |
+          export VERSION=`svu --strip-prefix`
+          install2.r --repo https://cloud.r-project.org desc
+          Rscript -e "desc::desc_set_version('${VERSION}')"
+
+    # we use version number for caching
+    - restore_cache:
+        keys:
+        - when-{{ .Environment.CIRCLE_PULL_REQUEST }}-{{ checksum "DESCRIPTION" }}
+
+    - run:
+        name: Install R deps takes 15min, but no worries we skipinstalled from cache when this PR has installed them before
+        command: |
+          tlmgr install collection-fontsrecommended
+          install2.r --skipinstalled --repo https://cloud.r-project.org devtools urltools httr pkgdown mockery git2r covr
+          Rscript -e "git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')"
+
+    - save_cache:
+        paths:
+        - /usr/local/lib/R/library
+        - /usr/local/lib/R/site-library
+        - /tmp/downloaded_packages
+        key: when-{{ .Environment.CIRCLE_PULL_REQUEST }}-{{ checksum "DESCRIPTION" }}
+
+    - run:
+        name: Build and check artifacts
+        command: |
+          export PACKAGE=`grep Package DESCRIPTION | head -n1 | cut -d':' -f2 | xargs`
+          export TAG=`grep Version DESCRIPTION | head -n1 | cut -d':' -f2 | xargs`
+          echo "Testing ${PACKAGE}:${TAG}"
+          Rscript -e 'devtools::check(remote=TRUE, force_suggests = FALSE, error_on="error")'
+          Rscript -e 'library(covr);codecov()'
+          R CMD build .
+          Rscript -e "devtools::check_built(path = './${PACKAGE}_${TAG}.tar.gz', remote=TRUE, force_suggests = FALSE)"
+          Rscript -e "pkgdown::build_site()"
+
+    - run:
+        name: If on master and significant commits then release to github and message slack
+        command: |
+          export PACKAGE=`grep Package DESCRIPTION | head -n1 | cut -d':' -f2 | xargs`
+          export TAG=`grep Version DESCRIPTION | head -n1 | cut -d':' -f2 | xargs`
+          export PREVIOUS=$(git tag -l --sort -version:refname | head -n 1)
+          export NEXT="v${TAG}"
+          echo "NEXT=${NEXT} and PREVIOUS=${PREVIOUS}"
+          mkdir build
+          cp ${PACKAGE}_${TAG}.tar.gz build/.
+
+          if [  $CIRCLE_BRANCH = "master" ] && [ $PREVIOUS != $NEXT  ]; then
+            echo "Releasing ${PACKAGE}:${TAG}, pushing to git"
+
+            git tag v${TAG}
+            git push --tags origin master
+
+            response=$(curl -L -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/molgenis/molgenis-r-auth/releases \
+            -d "{\"tag_name\":\"${NEXT}\",\"target_commitish\":\"master\",\"name\":\"${NEXT}\",\"draft\":false,\"prerelease\":false,\"generate_release_notes\":true}")
+
+            RELEASE_ID=$(echo "$response" | jq -r .id)
+            echo "Created release $RELEASE_ID"
+
+            curl -L -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" -H "Content-Type: application/octet-stream" \
+            "https://uploads.github.com/repos/molgenis/molgenis-r-auth/releases/${RELEASE_ID}/assets?name=${PACKAGE}_${TAG}.tar.gz" \
+            --data-binary "@${PACKAGE}_${TAG}.tar.gz"
+
+            Rscript -e "usethis::use_pkgdown_github_pages()"
+
+            curl -d "token=${SLACK_TOKEN}" \
+            -d "text=:molgenis-armadillo: molgenis-r-auth version: v${TAG} is released :rocket:" \
+            -d "channel=C03AAGBH3PC" \
+            -X POST https://slack.com/api/chat.postMessage
+
+          elif [ $CIRCLE_BRANCH = "master" ] && [ $PREVIOUS = $NEXT ]; then
+            echo "skipping release, no significant commits, version is still $TAG"
+
+            curl -d "token=${SLACK_TOKEN}" \
+            -d "text=:molgenis-armadillo: molgenis-r-auth master build success :thumbsup:, no release because no significant commits added." \
+            -d "channel=C0639V5KTCY" \
+            -X POST https://slack.com/api/chat.postMessage
+          else
+            echo "skipping release, we are not on master branch"
+
+            curl -d "token=${SLACK_TOKEN}" \
+            -d "text=:molgenis-armadillo: *<${CIRCLE_PULL_REQUEST}|Circle-CI » Armadillo » molgenis-r-auth » PR-${CIRCLE_PULL_REQUEST##*/} #${CIRCLE_BUILD_NUM}>*" \
+            -d "channel=C0639V5KTCY" \
+            -X POST https://slack.com/api/chat.postMessage
+          fi
+
+    - store_artifacts:
+        path: build
