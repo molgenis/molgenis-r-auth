@@ -61,17 +61,39 @@ discover <- function(auth_server) {
 #' @export
 device_flow_auth <-
   function(endpoint, client_id, scopes = c("openid", "offline_access")) {
+    encoding_options <- c("json", "form", "multipart", "raw")
+    encode <- NULL
+
     stopifnot(
       inherits(endpoint, "oauth_endpoint"),
       is.character(client_id),
       is.character(endpoint$device)
     )
-    response <- httr::POST(endpoint$device,
-      body = list(
-        client_id = client_id,
-        scope = paste(scopes, collapse = " ")
-      )
-    )
+
+    response = list(status_code = 415)
+    attempt <- 0
+
+    while(response$status_code != 200 & attempt < length(encoding_options)) {
+      attempt <- attempt + 1
+      encode <- encoding_options[attempt]
+      try({
+          response <- httr::POST(
+            endpoint$device,
+            encode = encode,
+            body = list(
+              client_id = client_id,
+              scope = paste(scopes, collapse = " ")
+            )
+          )
+          print(paste0(response$status_code, encode))
+          print(paste0(response$body))
+      })
+    }
+
+    if(response$status_code != 200){
+      stop("No encoding methods worked")
+    }
+
     httr::stop_for_status(response,
       task = "initiate OpenID Device Flow authentication"
     )
@@ -97,6 +119,7 @@ device_flow_auth <-
       pause_min = auth_res$interval,
       times = auth_res$expires_in / auth_res$interval,
       quiet = TRUE,
+      encode = encode,
       body = list(
         "client_id" = client_id,
         "grant_type" = "urn:ietf:params:oauth:grant-type:device_code",
