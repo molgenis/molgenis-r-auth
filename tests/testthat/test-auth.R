@@ -87,6 +87,7 @@ test_that("device flow retrieves token", {
     times = 12,
     quiet = TRUE,
     body = list(
+      "scope" = "openid offline_access",
       "client_id" = "6fca9d08-c514-11ea-87d0-0242ac130003",
       "grant_type" = "urn:ietf:params:oauth:grant-type:device_code",
       "device_code" = "D4S5CVQ"
