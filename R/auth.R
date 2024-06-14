@@ -98,6 +98,7 @@ device_flow_auth <-
       times = auth_res$expires_in / auth_res$interval,
       quiet = TRUE,
       body = list(
+        "scope" = paste(scopes, collapse = " "),
         "client_id" = client_id,
         "grant_type" = "urn:ietf:params:oauth:grant-type:device_code",
         "device_code" = auth_res$device_code
