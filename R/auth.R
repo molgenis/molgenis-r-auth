@@ -113,7 +113,6 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
   )
 }
 
-
 #' Request Token via Browser
 #'
 #' Opens a browser to allow the user to log in and obtain an ID token.
@@ -163,7 +162,9 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
     param_set(
       auth_res$verification_uri_complete,
       "client_id",
-      client_id
+      client_id,
+      "scope",
+      paste(scopes, collapse = " ")
     )
   )
 }
