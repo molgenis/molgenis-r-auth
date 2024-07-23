@@ -22,11 +22,11 @@ discover <- function(auth_server) {
 
   # retrieve configuration
   openid_config_url <- paste0(auth_server, ".well-known/openid-configuration")
-  response <- httr::GET(openid_config_url)
-  httr::stop_for_status(response, task = "discover OpenID configuration")
-  configuration <- httr::content(response)
+  req <- httr2::request(openid_config_url)
+  response <- httr2::req_perform(req)
+  configuration <- httr2::resp_body_json(response)
 
-  return(httr::oauth_endpoint(
+  return(list(
     request = NULL,
     authorize = configuration$authorization_endpoint,
     access = configuration$token_endpoint,
@@ -60,22 +60,18 @@ discover <- function(auth_server) {
 #'
 #' @export
 device_flow_auth <-
-  function(endpoint, client_id, scopes = c("openid", "offline_access")) {
+  function(device, client_id, scopes = c("openid", "offline_access")) {
     stopifnot(
-      inherits(endpoint, "oauth_endpoint"),
       is.character(client_id),
       is.character(endpoint$device)
     )
-    response <- httr::POST(endpoint$device,
-      body = list(
+    req <- httr2::request(endpoint$device) |>
+      httr2::req_body_form(
         client_id = client_id,
         scope = paste(scopes, collapse = " ")
       )
-    )
-    httr::stop_for_status(response,
-      task = "initiate OpenID Device Flow authentication"
-    )
-    auth_res <- httr::content(response)
+    response <- httr2::req_perform(req)
+    auth_res <- httr2::resp_body_json(response)
     if (interactive()) {
       print(paste0(
         "We're opening a browser so you can log in with code ",
@@ -89,23 +85,31 @@ device_flow_auth <-
     )
     .browse_url(verification_url)
 
-    response <- httr::RETRY(
-      url = endpoint$access,
-      verb = "POST",
-      pause_base = auth_res$interval,
-      pause_cap = auth_res$interval,
-      pause_min = auth_res$interval,
-      times = auth_res$expires_in / auth_res$interval,
-      quiet = TRUE,
-      body = list(
-        "client_id" = client_id,
-        "grant_type" = "urn:ietf:params:oauth:grant-type:device_code",
-        "device_code" = auth_res$device_code
+    req <- httr2::request(endpoint$access) |>
+      httr2::req_body_form( scope = paste(scopes, collapse = " "),
+                     client_id = client_id,
+                     grant_type = "urn:ietf:params:oauth:grant-type:device_code",
+                     device_code = auth_res$device_code) |>
+      httr2::req_retry(
+        max_tries =  auth_res$expires_in / auth_res$interval,
+        is_transient = function(resp) {
+          httr2::resp_status(resp) == 400
+        }
       )
-    )
-    httr::stop_for_status(response, task = "retrieve id token")
-    return(httr::content(response))
+    response <- httr2::req_perform(req)
+
+    return(httr2::resp_body_json(response))
   }
+
+.get_device <- function() {
+  req <- httr2::request(endpoint$device) |>
+    httr2::req_body_form(
+      client_id = client_id,
+      scope = paste(scopes, collapse = " ")
+    )
+  response <- httr2::req_perform(req)
+  return(response)
+}
 
 .browse_url <- function(url) {
   utils::browseURL(url)

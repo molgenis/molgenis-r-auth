@@ -11,10 +11,11 @@ test_that("discover copies endpoint info", {
   )
   httr_content <- mock(content)
 
-  with_mock(
+  with_mock_responses(
     endpoint <- discover("https://example.org"),
-    "httr::GET" = httr_get,
-    "httr::content" = httr_content
+    "httr2::request" = httr_get,
+    "httr2::req_perform" = httr_get,
+    "httr2::resp_body_json" = httr_content
   )
 
   expected <- httr::oauth_endpoint(
