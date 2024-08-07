@@ -76,13 +76,8 @@ device_flow_auth <-
 
   .check_inputs(client_id, endpoint)
   device <- .get_device(endpoint$device)
+  .get_token_via_browser(device, client_id)
 
-  if (interactive()) {
-    print(.make_browser_message(device))
-  }
-
-  verification_url <- .make_verification_url(device, client_id)
-  .browse_url(verification_url)
 
     req <- httr2::request(endpoint$access) |>
       httr2::req_body_form( scope = paste(scopes, collapse = " "),
@@ -121,6 +116,15 @@ device_flow_auth <-
   return(auth_res)
 }
 
+.get_token_via_browser <- function(device, client_id) {
+  if (interactive()) {
+    print(.make_browser_message(device))
+  }
+
+  verification_url <- .make_verification_url(device, client_id)
+  .browse_url(verification_url)
+}
+
 .make_browser_message <- function(device) {
   return(
     paste0(
@@ -130,6 +134,8 @@ device_flow_auth <-
   )
 }
 
+#' @importFrom urltools param_set
+#' @noRd
 .make_verification_url <- function(device, client_id) {
   return(
     param_set(
