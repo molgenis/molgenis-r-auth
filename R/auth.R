@@ -73,18 +73,20 @@ discover <- function(auth_server) {
 #' @export
 device_flow_auth <-
   function(endpoint, client_id, scopes = c("openid", "offline_access")) {
-    stopifnot(
-      is.character(client_id),
-      is.character(endpoint$device)
-    )
+
+  .check_inputs(client_id, endpoint)
+
+
     req <- httr2::request(endpoint$device) |>
       httr2::req_body_form(
         client_id = client_id,
         scope = paste(scopes, collapse = " ")
       )
-    browser()
+
     response <- httr2::req_perform(req)
     auth_res <- httr2::resp_body_json(response)
+
+
     if (interactive()) {
       print(paste0(
         "We're opening a browser so you can log in with code ",
@@ -114,6 +116,18 @@ device_flow_auth <-
 
     return(httr2::resp_body_json(response))
   }
+
+
+
+
+.check_inputs <- function(client_id, endpoint) {
+  assert_that(
+    is.character(client_id),
+    is.character(endpoint$device)
+  )
+}
+
+
 
 .get_device <- function() {
   req <- httr2::request(endpoint$device) |>
