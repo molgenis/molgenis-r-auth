@@ -75,31 +75,14 @@ device_flow_auth <-
   function(endpoint, client_id, scopes = c("openid", "offline_access")) {
 
   .check_inputs(client_id, endpoint)
+  device <- .get_device(endpoint$device)
 
+  if (interactive()) {
+    print(.make_browser_message(device))
+  }
 
-    req <- httr2::request(endpoint$device) |>
-      httr2::req_body_form(
-        client_id = client_id,
-        scope = paste(scopes, collapse = " ")
-      )
-
-    response <- httr2::req_perform(req)
-    auth_res <- httr2::resp_body_json(response)
-
-
-    if (interactive()) {
-      print(paste0(
-        "We're opening a browser so you can log in with code ",
-        auth_res$user_code
-      ))
-    }
-
-    verification_url <- auth_res$verification_uri_complete
-    verification_url <- urltools::param_set(
-      verification_url,
-      "client_id", client_id
-    )
-    .browse_url(verification_url)
+  verification_url <- .make_verification_url(device, client_id)
+  .browse_url(verification_url)
 
     req <- httr2::request(endpoint$access) |>
       httr2::req_body_form( scope = paste(scopes, collapse = " "),
@@ -127,16 +110,34 @@ device_flow_auth <-
   )
 }
 
-
-
-.get_device <- function() {
-  req <- httr2::request(endpoint$device) |>
+.get_device <- function(device) {
+  req <- httr2::request(device) |>
     httr2::req_body_form(
       client_id = client_id,
       scope = paste(scopes, collapse = " ")
     )
   response <- httr2::req_perform(req)
-  return(response)
+  auth_res <- httr2::resp_body_json(response)
+  return(auth_res)
+}
+
+.make_browser_message <- function(device) {
+  return(
+    paste0(
+      "We're opening a browser so you can log in with code ",
+      device$user_code
+    )
+  )
+}
+
+.make_verification_url <- function(device, client_id) {
+  return(
+    param_set(
+      device$verification_uri_complete,
+      "client_id",
+      client_id
+    )
+  )
 }
 
 .browse_url <- function(url) {
