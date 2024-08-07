@@ -16,11 +16,7 @@
 #' }
 #' @export
 discover <- function(auth_server) {
-  # ensure url ends with a single slash
-  auth_server_no_slash <- gsub("/$", "", auth_server)
-  auth_server <- paste0(auth_server_no_slash, "/")
-
-  # retrieve configuration
+  auth_server <- .ensure_single_slash(auth_server)
   openid_config_url <- paste0(auth_server, ".well-known/openid-configuration")
   req <- httr2::request(openid_config_url)
   response <- httr2::req_perform(req)
@@ -34,6 +30,22 @@ discover <- function(auth_server) {
     device = configuration$device_authorization_endpoint,
     logout = configuration$end_session_endpoint
   ))
+}
+
+#' Ensure a Single Trailing Slash in a URL
+#'
+#' This function takes a URL or server address as input and ensures that it ends
+#' with exactly one trailing slash.
+#'
+#' @param auth_server A character string representing a URL or server address.
+#'
+#' @return A character string representing the URL or server address with exactly
+#' one trailing slash.
+#'
+#' @noRd
+.ensure_single_slash <- function(auth_server) {
+  auth_server_no_slash <- gsub("/$", "", auth_server)
+  return(paste0(auth_server_no_slash, "/"))
 }
 
 #' Authenticate using device flow
@@ -60,7 +72,7 @@ discover <- function(auth_server) {
 #'
 #' @export
 device_flow_auth <-
-  function(device, client_id, scopes = c("openid", "offline_access")) {
+  function(endpoint, client_id, scopes = c("openid", "offline_access")) {
     stopifnot(
       is.character(client_id),
       is.character(endpoint$device)
@@ -70,6 +82,7 @@ device_flow_auth <-
         client_id = client_id,
         scope = paste(scopes, collapse = " ")
       )
+    browser()
     response <- httr2::req_perform(req)
     auth_res <- httr2::resp_body_json(response)
     if (interactive()) {
@@ -78,6 +91,7 @@ device_flow_auth <-
         auth_res$user_code
       ))
     }
+
     verification_url <- auth_res$verification_uri_complete
     verification_url <- urltools::param_set(
       verification_url,
