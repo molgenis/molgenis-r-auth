@@ -73,7 +73,7 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
 #'
 #' @noRd
 .ensure_single_slash <- function(auth_server) {
-  auth_server_no_slash <- gsub("/$", "", auth_server)
+  auth_server_no_slash <- gsub("/+$", "", auth_server)
   return(paste0(auth_server_no_slash, "/"))
 }
 
