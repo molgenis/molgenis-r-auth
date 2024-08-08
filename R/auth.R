@@ -24,12 +24,41 @@ discover <- function(auth_server) {
 
   return(list(
     request = NULL,
-    authorize = configuration$authorization_endpoint,
+    authorize = configuration$authorisation_endpoint,
     access = configuration$token_endpoint,
     user = configuration$userinfo_endpoint,
-    device = configuration$device_authorization_endpoint,
+    device = configuration$device_authorisation_endpoint,
     logout = configuration$end_session_endpoint
   ))
+}
+
+
+#' Authenticate using device flow
+#'
+#' Get an ID token using the
+#' \href{https://www.rfc-editor.org/rfc/rfc8628}{OpenIDConnect Device Flow}.
+#'
+#' @param endpoint An \code{\link{oauth_endpoint}} with a device endpoint
+#' specified in it
+#' @param client_id The client ID for which the token should be obtained
+#' @param scopes the requested scopes, default to
+#' \code{c("openid", "offline_access")}
+#' @return The credentials retrieved from the token endpoint
+#' @importFrom httr2 req_perform resp_body_json
+#' @examples
+#' \dontrun{
+#' endpoint <- discover("https://auth.molgenis.org")
+#' device_flow_auth(endpoint, "b396233b-cdb2-449e-ac5c-a0d28b38f791")
+#' }
+#'
+#' @export
+device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_access")) {
+  .check_inputs(endpoint, client_id)
+  auth_req <- .build_auth_request(endpoint, client_id, scopes)
+  auth_res <- req_perform(auth_req) |> resp_body_json()
+  .request_token_via_browser(auth_res, client_id)
+  cred_req <- .build_credential_request(endpoint, client_id, scopes, auth_res)
+  return(req_perform(cred_req))
 }
 
 #' Ensure a Single Trailing Slash in a URL
@@ -48,83 +77,68 @@ discover <- function(auth_server) {
   return(paste0(auth_server_no_slash, "/"))
 }
 
-#' Authenticate using device flow
+#' Check Inputs
 #'
-#' Get an ID token using the
-#' \href{https://www.rfc-editor.org/rfc/rfc8628}{OpenIDConnect Device Flow}.
+#' Validates that the provided client ID and endpoint are of the correct types.
 #'
-#' @param endpoint An \code{\link{oauth_endpoint}} with a device endpoint
-#' specified in it
-#' @param client_id The client ID for which the token should be obtained
-#' @param scopes the requested scopes, default to
-#' \code{c("openid", "offline_access")}
-#'
-#' @return The credentials retrieved from the token endpoint
-#'
-#' @importFrom utils browseURL
-#' @importFrom httr GET RETRY POST stop_for_status content
-#'
-#' @examples
-#' \dontrun{
-#' endpoint <- discover("https://auth.molgenis.org")
-#' device_flow_auth(endpoint, "b396233b-cdb2-449e-ac5c-a0d28b38f791")
-#' }
-#'
-#' @export
-device_flow_auth <-
-  function(endpoint, client_id, scopes = c("openid", "offline_access")) {
-
-  .check_inputs(client_id, endpoint)
-  device <- .get_device(endpoint$device)
-  .get_token_via_browser(device, client_id)
-
-
-    req <- httr2::request(endpoint$access) |>
-      httr2::req_body_form( scope = paste(scopes, collapse = " "),
-                     client_id = client_id,
-                     grant_type = "urn:ietf:params:oauth:grant-type:device_code",
-                     device_code = auth_res$device_code) |>
-      httr2::req_retry(
-        max_tries =  auth_res$expires_in / auth_res$interval,
-        is_transient = function(resp) {
-          httr2::resp_status(resp) == 400
-        }
-      )
-    response <- httr2::req_perform(req)
-
-    return(httr2::resp_body_json(response))
-  }
-
-
-
-
-.check_inputs <- function(client_id, endpoint) {
+#' @param client_id A character string representing the client ID.
+#' @param endpoint An \code{\link{oauth_endpoint}} object containing the endpoint details.
+#' @importFrom assertthat assert_that
+#' @return Throws an error if the inputs are not of the correct types.
+#' @noRd
+.check_inputs <- function(endpoint, client_id) {
   assert_that(
     is.character(client_id),
     is.character(endpoint$device)
   )
 }
 
-.get_device <- function(device) {
-  req <- httr2::request(device) |>
-    httr2::req_body_form(
-      client_id = client_id,
-      scope = paste(scopes, collapse = " ")
-    )
-  response <- httr2::req_perform(req)
-  auth_res <- httr2::resp_body_json(response)
-  return(auth_res)
+#' Build authorisation Request
+#'
+#' Builds an authorisation request with the specified client ID and scopes.
+#'
+#' @param endpoint An \code{\link{oauth_endpoint}} object containing the endpoint details.
+#' @param client_id A character string representing the client ID.
+#' @param scopes A character vector specifying the scopes requested for the token.
+#' @importFrom httr2 request req_body_form
+#' @return A request object ready to be sent to the authorisation endpoint.
+#' @noRd
+.build_auth_request <- function(endpoint, client_id, scopes) {
+  return(
+    request(endpoint$device) |>
+      req_body_form(
+        client_id = client_id,
+        scope = paste(scopes, collapse = " ")
+      )
+  )
 }
 
-.get_token_via_browser <- function(device, client_id) {
+
+#' Request Token via Browser
+#'
+#' Opens a browser to allow the user to log in and obtain an ID token.
+#'
+#' @param device A list containing device authorisation details, including the user code.
+#' @param client_id A character string representing the client ID.
+#'
+#' @return Opens a browser window for the user to complete authentication.
+#' @noRd
+.request_token_via_browser <- function(device, client_id) {
   if (interactive()) {
     print(.make_browser_message(device))
   }
-
   verification_url <- .make_verification_url(device, client_id)
   .browse_url(verification_url)
 }
 
+#' Make Browser Message
+#'
+#' Constructs a message to be displayed to the user when opening a browser for login.
+#'
+#' @param device A list containing device authorisation details, including the user code.
+#'
+#' @return A character string containing the message to be displayed.
+#' @noRd
 .make_browser_message <- function(device) {
   return(
     paste0(
@@ -134,6 +148,14 @@ device_flow_auth <-
   )
 }
 
+#' Make Verification URL
+#'
+#' Constructs the full verification URL by appending the client ID as a parameter.
+#'
+#' @param device A list containing device authorisation details, including the
+#' verification URI.
+#' @param client_id A character string representing the client ID.
+#' @return A character string containing the full verification URL.
 #' @importFrom urltools param_set
 #' @noRd
 .make_verification_url <- function(device, client_id) {
@@ -146,6 +168,77 @@ device_flow_auth <-
   )
 }
 
+#' Browse URL
+#'
+#' Opens the specified URL in the user's default web browser.
+#'
+#' @param url A character string representing the URL to be opened.
+#'
+#' @return Opens a browser window pointing to the specified URL.
+#' @importFrom utils browseURL
+#' @noRd
 .browse_url <- function(url) {
   utils::browseURL(url)
+}
+
+#' Build Credential Request
+#'
+#' This function builds a credential request by adding the necessary request body
+#' and retry logic to the request object.
+#'
+#' @param endpoint An \code{\link{oauth_endpoint}} object containing the endpoint details.
+#' @param client_id A character string representing the client ID.
+#' @param scopes A character vector specifying the scopes requested for the token.
+#' @param auth_res A list containing the authorisation response details, including
+#' `expires_in` and `interval` fields.
+#' @importFrom httr2 request
+#' @return A modified request object with the credential body and retry logic added.
+#' @noRd
+.build_credential_request <- function(endpoint, client_id, scopes, auth_res) {
+  return(
+    request(endpoint$access) |>
+      .add_credential_body(client_id, scopes, auth_res) |>
+      .add_credential_retry(auth_res)
+  )
+}
+
+#' Add Credential Body to Request
+#'
+#' Adds the necessary credential parameters to the request body for obtaining
+#' an access token.
+#'
+#' @param req The request object to which the body will be added.
+#' @param client_id A character string representing the client ID.
+#' @param scopes A character vector specifying the scopes requested for the token.
+#' @param auth_res A list containing the authorisation response details, including
+#' the device code.
+#' @return A modified request object with the credential body added.
+#' @noRd
+.add_credential_body <- function(req, client_id, scopes, auth_res) {
+  req |> req_body_form(
+    scope = paste(scopes, collapse = " "),
+    client_id = client_id,
+    grant_type = "urn:ietf:params:oauth:grant-type:device_code",
+    device_code = auth_res$device_code
+  )
+}
+
+#' Add Credential Retry Logic
+#'
+#' Adds retry logic to a request, with retry attempts based on the expiration
+#' and interval specified in the authorisation response.
+#'
+#' @param req The request object to which retry logic will be added.
+#' @param auth_res A list containing the authorisation response details, including
+#' `expires_in` and `interval` fields.
+#' @importFrom httr2 req_retry resp_status
+#' @return A modified request object with retry logic added.
+#' @noRd
+.add_credential_retry <- function(req, auth_res) {
+  req |> req_retry(
+    max_tries = auth_res$expires_in / auth_res$interval,
+    is_transient = function(resp) {
+      resp_status(resp) == 400
+    }
+  )
 }
