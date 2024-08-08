@@ -18,16 +18,16 @@
 discover <- function(auth_server) {
   auth_server <- .ensure_single_slash(auth_server)
   openid_config_url <- paste0(auth_server, ".well-known/openid-configuration")
-  req <- httr2::request(openid_config_url)
-  response <- httr2::req_perform(req)
-  configuration <- httr2::resp_body_json(response)
+  req <- request(openid_config_url)
+  response <- req_perform(req)
+  configuration <- resp_body_json(response)
 
   return(list(
     request = NULL,
-    authorize = configuration$authorisation_endpoint,
+    authorize = configuration$authorization_endpoint,
     access = configuration$token_endpoint,
     user = configuration$userinfo_endpoint,
-    device = configuration$device_authorisation_endpoint,
+    device = configuration$device_authorization_endpoint,
     logout = configuration$end_session_endpoint
   ))
 }
@@ -123,11 +123,11 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
 #'
 #' @return Opens a browser window for the user to complete authentication.
 #' @noRd
-.request_token_via_browser <- function(device, client_id) {
+.request_token_via_browser <- function(auth_res, client_id) {
   if (interactive()) {
-    print(.make_browser_message(device))
+    print(.make_browser_message(auth_res))
   }
-  verification_url <- .make_verification_url(device, client_id)
+  verification_url <- .make_verification_url(auth_res, client_id)
   .browse_url(verification_url)
 }
 
@@ -139,11 +139,11 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
 #'
 #' @return A character string containing the message to be displayed.
 #' @noRd
-.make_browser_message <- function(device) {
+.make_browser_message <- function(auth_res) {
   return(
     paste0(
       "We're opening a browser so you can log in with code ",
-      device$user_code
+      auth_res$user_code
     )
   )
 }
@@ -158,10 +158,10 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
 #' @return A character string containing the full verification URL.
 #' @importFrom urltools param_set
 #' @noRd
-.make_verification_url <- function(device, client_id) {
+.make_verification_url <- function(auth_res, client_id) {
   return(
     param_set(
-      device$verification_uri_complete,
+      auth_res$verification_uri_complete,
       "client_id",
       client_id
     )
