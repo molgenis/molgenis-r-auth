@@ -39,15 +39,15 @@ jobs:
           Rscript -e "desc::desc_set_version('${VERSION}')"
 
     # we use version number for caching
-    - restore_cache:
-       keys:
-       - when-{{ .Environment.CIRCLE_PULL_REQUEST }}-{{ checksum "DESCRIPTION" }}
+    # - restore_cache:
+    #    keys:
+    #    - when-{{ .Environment.CIRCLE_PULL_REQUEST }}-{{ checksum "DESCRIPTION" }}
 
     - run:
         name: Install R deps takes 15min, but no worries we skipinstalled from cache when this PR has installed them before
         command: |
           tlmgr install collection-fontsrecommended
-          install2.r --skipinstalled --repo https://cloud.r-project.org devtools urltools httr pkgdown mockery git2r covr httr2 testthat assertthat
+          install2.r --repo https://cloud.r-project.org devtools urltools httr pkgdown mockery git2r covr httr2 testthat assertthat
           Rscript -e "git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')"
 
     - save_cache:
