@@ -67,7 +67,7 @@ jobs:
           Rscript -e 'library(covr);codecov()'
           R CMD build .
           Rscript -e "devtools::check_built(path = './${PACKAGE}_${TAG}.tar.gz', remote=TRUE, force_suggests = FALSE)"
-          Rscript -e "pkgdown::build_site()"
+          # Rscript -e "pkgdown::build_site()"
 
     - run:
         name: If on master and significant commits then release to github and message slack
