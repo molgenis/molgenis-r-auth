@@ -48,6 +48,7 @@ jobs:
         command: |
           tlmgr install collection-fontsrecommended
           Rscript -e 'install.packages(c("testthat", "devtools", "urltools", "httr", "pkgdown", "mockery", "git2r", "covr", "httr2", "assertthat"))'
+          devtools::install_version("httr2", version = "1.0.2")
           Rscript -e 'print(installed.packages())'
           Rscript -e "git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')"
 
