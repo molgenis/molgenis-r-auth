@@ -142,7 +142,7 @@ test_that(".browse_url tries to open page with correct URL", {
 
   test_url <- "https://example.com"
 
-  expected <- with_mocked_bindings(
+  expected <- testthat::with_mocked_bindings(
     .browse_url(test_url),
     browseURL = function(url) return(url),
     .package = "utils"
@@ -272,7 +272,7 @@ test_that("discover copies endpoint info", {
     return(out)
   }
 
-  endpoint <- with_mocked_bindings(
+  endpoint <- testthat::with_mocked_bindings(
     discover("https://example.org"),
     "req_perform" = req_perform_mock,
     "resp_body_json" = resp_body_json_mock
@@ -353,7 +353,7 @@ test_that("device_flow_auth correctly returns token info", {
     return("got token")
   }
 
-  observed <- with_mocked_bindings(
+  observed <- testthat::with_mocked_bindings(
     device_flow_auth(endpoint, client_id, scopes),
     ".build_auth_request" = .build_auth_request_mock,
     "req_perform" = req_perform_mock,
