@@ -152,6 +152,16 @@ test_that(".browse_url tries to open page with correct URL", {
 
 })
 
+test_that(".request_token_via_browser works", {
+  auth_res <- list(verification_uri_complete = "https://example.com/verify")
+  client_id <- "b396233b-cdb2-449e-ac5c-a0d28b38f791"
+
+  returned <- with_mocked_bindings(
+    .request_token_via_browser(auth_res, client_id),
+    ".browse_url" = function(verification_url) "browsing")
+  expect_equal(returned, "browsing")
+}) # I think code cov will complain about not testing for interactive = F
+
 test_that(".add_credential_body correctly adds the body", {
 
 req <- request("https://example.org/oauth2/token")
