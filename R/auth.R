@@ -4,10 +4,10 @@
 #'
 #' @param auth_server the server
 #'
-#' @return An \code{\link{oauth_endpoint}} with the discovered endpoints.
+#' @return An list with the discovered endpoints.
 #'
 #' @importFrom urltools path
-#' @importFrom httr GET stop_for_status content oauth_endpoint
+#' @importFrom httr2 req_perform resp_body_json request
 #'
 #' @examples
 #' \dontrun{
@@ -18,7 +18,6 @@
 discover <- function(auth_server) {
   auth_server <- .ensure_single_slash(auth_server)
   openid_config_url <- paste0(auth_server, ".well-known/openid-configuration")
-  req <- request(openid_config_url)
   response <- req_perform(req)
   configuration <- resp_body_json(response)
 
@@ -38,8 +37,7 @@ discover <- function(auth_server) {
 #' Get an ID token using the
 #' \href{https://www.rfc-editor.org/rfc/rfc8628}{OpenIDConnect Device Flow}.
 #'
-#' @param endpoint An \code{\link{oauth_endpoint}} with a device endpoint
-#' specified in it
+#' @param endpoint An list with a device endpoint specified in it
 #' @param client_id The client ID for which the token should be obtained
 #' @param scopes the requested scopes, default to
 #' \code{c("openid", "offline_access")}
@@ -58,7 +56,8 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
   auth_res <- req_perform(auth_req) |> resp_body_json()
   .request_token_via_browser(auth_res, client_id)
   cred_req <- .build_credential_request(endpoint, client_id, scopes, auth_res)
-  return(req_perform(cred_req))
+  response <- req_perform(cred_req)
+  return(httr2::resp_body_json(response))
 }
 
 #' Ensure a Single Trailing Slash in a URL
@@ -82,7 +81,7 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
 #' Validates that the provided client ID and endpoint are of the correct types.
 #'
 #' @param client_id A character string representing the client ID.
-#' @param endpoint An \code{\link{oauth_endpoint}} object containing the endpoint details.
+#' @param endpoint A list containing the endpoint details.
 #' @importFrom assertthat assert_that
 #' @return Throws an error if the inputs are not of the correct types.
 #' @noRd
@@ -97,7 +96,7 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
 #'
 #' Builds an authorisation request with the specified client ID and scopes.
 #'
-#' @param endpoint An \code{\link{oauth_endpoint}} object containing the endpoint details.
+#' @param endpoint A list containing the endpoint details.
 #' @param client_id A character string representing the client ID.
 #' @param scopes A character vector specifying the scopes requested for the token.
 #' @importFrom httr2 request req_body_form
@@ -186,7 +185,7 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
 #' This function builds a credential request by adding the necessary request body
 #' and retry logic to the request object.
 #'
-#' @param endpoint An \code{\link{oauth_endpoint}} object containing the endpoint details.
+#' @param endpoint A list containing the endpoint details.
 #' @param client_id A character string representing the client ID.
 #' @param scopes A character vector specifying the scopes requested for the token.
 #' @param auth_res A list containing the authorisation response details, including
