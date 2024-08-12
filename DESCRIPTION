@@ -2,7 +2,7 @@ Package: MolgenisAuth
 Title: 'OpenID Connect' Discovery and Authentication
 Description: Discover 'OpenID Connect' endpoints and authenticate
     using device flow. Used by 'MOLGENIS' packages.
-Version: 0.0.26
+Version: 0.0.25
 Authors@R: 
     c(
       person(given = "Fleur",
@@ -25,11 +25,6 @@ Authors@R:
              role = c("aut", "cre"),
              email = "m.k.slofstra@umcg.nl",
              comment = c(ORCID = "0000-0002-0400-0468")),
-      person(given = "Tim",
-             family = "Cadman",
-             role = c("aut"),
-             email = "t.j.cadman@umcg.nl",
-             comment = c(ORCID = "0000-0002-7682-5645")),
       person(given = "MOLGENIS org",
              role = c("cph", "fnd"),
              email = "molgenis-support@umcg.nl"))
@@ -39,14 +34,14 @@ Author: Fleur Kelpin [aut] (<https://orcid.org/0000-0003-1527-5130>),
     Mariska Slofstra [aut, cre] (<https://orcid.org/0000-0002-0400-0468>),
     MOLGENIS org [cph, fnd]
 Maintainer: Mariska Slofstra <m.k.slofstra@umcg.nl>
-Imports: urltools (>= 1.7.0), httr2(>= 1.0.1), assertthat
+Imports: httr (>= 1.4.0), urltools (>= 1.7.0)
 URL: https://github.com/molgenis/molgenis-r-auth/,
   https://molgenis.github.io/molgenis-r-auth/
 BugReports: https://github.com/molgenis/molgenis-r-auth/issues/
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.2.3
 Suggests: 
     testthat, 
     mockery
