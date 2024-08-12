@@ -18,6 +18,7 @@
 discover <- function(auth_server) {
   auth_server <- .ensure_single_slash(auth_server)
   openid_config_url <- paste0(auth_server, ".well-known/openid-configuration")
+  req <- request(openid_config_url)
   response <- req_perform(req)
   configuration <- resp_body_json(response)
 
@@ -57,7 +58,7 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
   .request_token_via_browser(auth_res, client_id)
   cred_req <- .build_credential_request(endpoint, client_id, scopes, auth_res)
   response <- req_perform(cred_req)
-  return(httr2::resp_body_json(response))
+  return(resp_body_json(response))
 }
 
 #' Ensure a Single Trailing Slash in a URL
