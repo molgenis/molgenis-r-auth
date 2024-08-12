@@ -373,7 +373,7 @@ test_that("device_flow_auth correctly returns token info", {
 
   expect_equal(
     observed,
-    "req_performed"
+    list(status = 200)
   ) ## This test isn't doing anything meaningful as we have to mock the final function, but there are tests for all the sub functions and we test the arguments are as expcted
 
   expect_equal(
