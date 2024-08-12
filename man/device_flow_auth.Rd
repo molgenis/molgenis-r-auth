@@ -7,7 +7,8 @@
 device_flow_auth(endpoint, client_id, scopes = c("openid", "offline_access"))
 }
 \arguments{
-\item{endpoint}{An list with a device endpoint specified in it}
+\item{endpoint}{An \code{\link{oauth_endpoint}} with a device endpoint
+specified in it}
 
 \item{client_id}{The client ID for which the token should be obtained}
 
