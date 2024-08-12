@@ -49,7 +49,8 @@ jobs:
         name: Install R deps takes 15min, but no worries we skipinstalled from cache when this PR has installed them before
         command: |
           tlmgr install collection-fontsrecommended
-          install2.r --skipinstalled --repo https://cloud.r-project.org devtools urltools httr pkgdown mockery git2r covr
+          Rscript -e 'install.packages(c("testthat", "devtools", "urltools", "httr", "pkgdown", "mockery", "git2r", "covr", "httr2", "assertthat"), repos = "https://cloud.r-project.org")'
+          Rscript -e 'print(installed.packages())'
           Rscript -e "git2r::config(user.email = 'molgenis+ci@gmail.com', user.name = 'MOLGENIS Jenkins')"
 
     - save_cache:
