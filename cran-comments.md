@@ -1,4 +1,8 @@
 # CRAN Comments
+## 0.26 Upgrade to httr2
+* Upgrade httr to httr2
+* Make Tim Cadman maintainer
+
 ## 0.0.25: Fix generate docs
 * Regenerate docs
 

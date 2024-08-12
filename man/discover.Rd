@@ -10,7 +10,7 @@ discover(auth_server)
 \item{auth_server}{the server}
 }
 \value{
-An \code{\link{oauth_endpoint}} with the discovered endpoints.
+An list with the discovered endpoints.
 }
 \description{
 Performs OpenID Connect discovery on an ID Provider.
