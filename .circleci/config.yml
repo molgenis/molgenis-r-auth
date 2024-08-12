@@ -40,8 +40,8 @@ jobs:
 
     # we use version number for caching
     - restore_cache:
-      keys:
-      - when-{{ .Environment.CIRCLE_PULL_REQUEST }}-{{ checksum "DESCRIPTION" }}
+        keys:
+        - when-{{ .Environment.CIRCLE_PULL_REQUEST }}-{{ checksum "DESCRIPTION" }}
 
     - run:
         name: Install R deps takes 15min, but no worries we skipinstalled from cache when this PR has installed them before
