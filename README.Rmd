@@ -57,5 +57,3 @@ credentials$id_token
 ## Support
 We appreciate help, so do not be shy and file pull-requests for things that are
 broken or file a bug report.
-
-test
