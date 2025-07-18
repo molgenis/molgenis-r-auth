@@ -1,3 +1,8 @@
+# MolgenisAuth 0.0.29
+**Internal:** Switched from `httr` to the `httr2` package (since `httr` is no longer maintained).
+
+**Fix:** Apply a consistent 5-second backoff when polling for login, avoiding unnecessary delays caused by exponential backoff.
+
 # MolgenisAuth 0.0.25
 
 # MolgenisAuth 0.0.24
