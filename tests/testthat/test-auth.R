@@ -1,4 +1,5 @@
 library(testthat)
+library(httr2)
 library(assertthat)
 
 test_that(".ensure_single_slash adds a single trailing slash when absent", {
@@ -49,45 +50,29 @@ test_that(".check_inputs returns error when input types incorrect", {
 })
 
 test_that(".build_auth_request correctly builds the request", {
+  endpoint <- list(
+    request = NULL,
+    authorize = "https://example.org/oauth2/authorize",
+    access = "https://example.org/oauth2/token",
+    user = "https://example.org/oauth2/userinfo",
+    device = "https://example.org/oauth2/device-authorize",
+    logout = "https://example.org/oauth2/logout"
+  )
 
-          endpoint <- list(
-            request = NULL,
-            authorize = "https://example.org/oauth2/authorize",
-            access = "https://example.org/oauth2/token",
-            user = "https://example.org/oauth2/userinfo",
-            device = "https://example.org/oauth2/device-authorize",
-            logout = "https://example.org/oauth2/logout"
-          )
+  client_id <- "b396233b-cdb2-449e-ac5c-a0d28b38f791"
+  scopes <- c("openid", "offline_access")
 
-          client_id <- "b396233b-cdb2-449e-ac5c-a0d28b38f791"
-          scopes = c("openid", "offline_access")
+  req <- .build_auth_request(endpoint, client_id, scopes)
 
-          expected <- list(
-            url = "https://example.org/oauth2/device-authorize",
-            method = NULL,
-            headers = list(),
-            body = list(
-              data = list(
-                client_id = structure("b396233b-cdb2-449e-ac5c-a0d28b38f791", class = "AsIs"),
-                scope = structure("openid%20offline_access", class = "AsIs")
-              ),
-              type = "form",
-              content_type = "application/x-www-form-urlencoded",
-              params = list()
-            ),
-            fields = list(),
-            options = list(),
-            policies = list()
-          )
-
-          attr(expected, "class") <- "httr2_request"
-
-          expect_equal(
-            .build_auth_request(endpoint, client_id, scopes),
-            expected
-          )
-
+  expect_s3_class(req, "httr2_request")
+  expect_equal(req$url, "https://example.org/oauth2/device-authorize")
+  expect_null(req$method)
+  expect_equal(req$headers, list())
+  expect_equal(req$body$type, "form")
+  expect_identical(as.character(req$body$data$client_id), client_id)
+  expect_identical(as.character(req$body$data$scope), "openid%20offline_access")
 })
+
 
 test_that(".make_browser_message constructs the correct message with different inputs", {
 
@@ -163,115 +148,78 @@ test_that(".request_token_via_browser works", {
 }) # I think code cov will complain about not testing for interactive = F
 
 test_that(".add_credential_body correctly adds the body", {
+  req <- request("https://example.org/oauth2/token")
 
-req <- request("https://example.org/oauth2/token")
-
-scopes <- c("openid", "offline_access")
-client_id <- "b396233b-cdb2-449e-ac5c-a0d28b38f791"
-grant_type <- "urn:ietf:params:oauth:grant-type:device_code"
-auth_res <- list(
-  device_code = "ncEfhoD8wx085imJCBMPGWnCYtdLZeHWl3hGen4cS0Q",
-  expires_in = 1800,
-  interval = 5,
-  user_code = "7ZNG6Q",
-  verification_uri = "https://example.org/oauth2/device",
-  verification_uri_complete = "https://example.org/oauth2/device?user_code=7ZNG6Q"
-)
-
-expected <- list(
-    url = "https://example.org/oauth2/token",
-    method = NULL,
-    headers = list(),
-    body = list(
-      data = list(
-        scope = structure("openid%20offline_access", class = "AsIs"),
-        client_id = structure("b396233b-cdb2-449e-ac5c-a0d28b38f791", class = "AsIs"),
-        grant_type = structure("urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code", class = "AsIs"),
-        device_code = structure("ncEfhoD8wx085imJCBMPGWnCYtdLZeHWl3hGen4cS0Q", class = "AsIs")
-      ),
-      type = "form",
-      content_type = "application/x-www-form-urlencoded",
-      params = list()
-    ),
-    fields = list(),
-    options = list(),
-    policies = list()
+  scopes <- c("openid", "offline_access")
+  client_id <- "b396233b-cdb2-449e-ac5c-a0d28b38f791"
+  grant_type <- "urn:ietf:params:oauth:grant-type:device_code"
+  auth_res <- list(
+    device_code = "ncEfhoD8wx085imJCBMPGWnCYtdLZeHWl3hGen4cS0Q",
+    expires_in = 1800,
+    interval = 5,
+    user_code = "7ZNG6Q",
+    verification_uri = "https://example.org/oauth2/device",
+    verification_uri_complete = "https://example.org/oauth2/device?user_code=7ZNG6Q"
   )
 
-attr(expected, "class") <- "httr2_request"
+  observed <- .add_credential_body(req, client_id, scopes, auth_res)
 
-observed <- .add_credential_body(req, client_id, scopes, auth_res)
+  expect_s3_class(observed, "httr2_request")
+  expect_equal(observed$url, "https://example.org/oauth2/token")
 
-expect_equal(expected, observed)
+  body <- observed$body
+  data <- body$data
 
+  expect_equal(body$type, "form")
+  expect_identical(as.character(data$scope), "openid%20offline_access")
+  expect_identical(as.character(data$client_id), client_id)
+  expect_identical(as.character(data$grant_type), "urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code")
+  expect_identical(as.character(data$device_code), auth_res$device_code)
 })
 
+
 test_that(".add_credential_retry correctly adds the retry options", {
+  scopes <- c("openid", "offline_access")
+  client_id <- "b396233b-cdb2-449e-ac5c-a0d28b38f791"
 
-scopes <- c("openid", "offline_access")
-client_id <- "b396233b-cdb2-449e-ac5c-a0d28b38f791"
-grant_type <- "urn:ietf:params:oauth:grant-type:device_code"
-
-auth_res <- list(
-  device_code = "0AS2fIeoOiga1W-QYmU1-oW2JnpM9U_lcap6oJlvcXw",
-  expires_in = 1800,
-  interval = 5,
-  user_code = "7ZNG6Q",
-  verification_uri = "https://auth.molgenis.org/oauth2/device",
-  verification_uri_complete = "https://auth.molgenis.org/oauth2/device?user_code=7ZNG6Q"
-)
-
-req <- request("https://example.org/oauth2/token") |>
-  .add_credential_body(client_id, scopes, auth_res)
-
-retry_is_transient <- function(resp) {
-  resp_status(resp) == 400
-}
-
-observed <- .add_credential_retry(req, auth_res)
-
-expect_equal(
-  names(observed),
-  c("url", "method", "headers", "body", "fields", "options", "policies")
-)
-
-expect_equal(
-  dimnames(summary(observed$policies))[[1]],
-  c("retry_max_tries", "retry_is_transient")
-)
-
-expect_equal(
-  class(observed),
-  "httr2_request"
+  auth_res <- list(
+    device_code = "0AS2fIeoOiga1W-QYmU1-oW2JnpM9U_lcap6oJlvcXw",
+    expires_in = 1800,
+    interval = 5,
+    user_code = "7ZNG6Q",
+    verification_uri = "https://auth.molgenis.org/oauth2/device",
+    verification_uri_complete = "https://auth.molgenis.org/oauth2/device?user_code=7ZNG6Q"
   )
 
+  req <- request("https://example.org/oauth2/token") |>
+    .add_credential_body(client_id, scopes, auth_res)
+
+  observed <- .add_credential_retry(req, auth_res)
+
+  expect_s3_class(observed, "httr2_request")
+
+  # Check individual retry-related policies (flat structure)
+  policies <- observed$policies
+
+  expect_true("retry_max_tries" %in% names(policies))
+  expect_true("retry_is_transient" %in% names(policies))
+
+  expect_equal(policies$retry_max_tries, auth_res$expires_in / auth_res$interval)
+  expect_true(is.function(policies$retry_is_transient))
 })
 
 test_that("discover copies endpoint info", {
-  response <- structure(list(status_code = 200), class = "response")
-  content <- list(
-    authorization_endpoint = "https://example.org/oauth2/authorize",
-    token_endpoint = "https://example.org/oauth2/token",
-    userinfo_endpoint = "https://example.org/oauth2/userinfo",
-    device_authorization_endpoint =
-      "https://example.org/oauth2/device-authorize",
-    end_session_endpoint = "https://example.org/oauth2/logout"
-  )
-
   perform_args <- NULL
   request_args <- NULL
 
   req_perform_mock <- function(req) {
-
     perform_args <<- req
-    out <- list(status_code = 200)
-    return(out)
-
+    structure(list(status_code = 200), class = "response")
   }
 
   resp_body_json_mock <- function(resp) {
     request_args <<- resp
-    out <- list(
+    list(
       request = NULL,
       authorization_endpoint = "https://example.org/oauth2/authorize",
       token_endpoint = "https://example.org/oauth2/token",
@@ -279,7 +227,6 @@ test_that("discover copies endpoint info", {
       device_authorization_endpoint = "https://example.org/oauth2/device-authorize",
       end_session_endpoint = "https://example.org/oauth2/logout"
     )
-    return(out)
   }
 
   endpoint <- testthat::with_mocked_bindings(
@@ -288,27 +235,17 @@ test_that("discover copies endpoint info", {
     "resp_body_json" = resp_body_json_mock
   )
 
-  expected_perform_args <- list(
-    url = "https://example.org/.well-known/openid-configuration",
-    method = NULL,
-    headers = list(),
-    body = NULL,
-    fields = list(),
-    options = list(),
-    policies = list()
-  )
-  attr(expected_perform_args, "class") <- "httr2_request"
+  # Check relevant request fields
+  expect_s3_class(perform_args, "httr2_request")
+  expect_equal(perform_args$url, "https://example.org/.well-known/openid-configuration")
+  expect_equal(perform_args$method, NULL)
 
-  expect_equal(
-    perform_args,
-    expected_perform_args
-  )
+  # Check structure of response passed to resp_body_json
+  expect_type(request_args, "list")
+  expect_s3_class(request_args, "response")
+  expect_equal(request_args$status_code, 200)
 
-  expect_equal(
-    request_args,
-    list(status_code = 200)
-  )
-
+  # Check final result from discover()
   expected <- list(
     request = NULL,
     authorize = "https://example.org/oauth2/authorize",
@@ -318,12 +255,9 @@ test_that("discover copies endpoint info", {
     logout = "https://example.org/oauth2/logout"
   )
 
-  expect_equal(
-    endpoint,
-    expected
-  )
-
+  expect_equal(endpoint, expected)
 })
+
 
 test_that("device_flow_auth correctly returns token info", {
   endpoint <- list(
@@ -345,7 +279,7 @@ test_that("device_flow_auth correctly returns token info", {
 
   .build_auth_request_mock <- function(endpoint, client_id, scopes) {
     build_auth_request_args <<- list(endpoint, client_id, scopes)
-    return("built_auth_request")
+    return(request("https://mock-auth"))
   }
 
   req_perform_mock <- function(req) {
@@ -355,7 +289,15 @@ test_that("device_flow_auth correctly returns token info", {
 
   resp_body_json_mock <- function(req) {
     resp_body_json_args <<- req
-  return(list(status = 200))
+    return(list(
+      status = 200,
+      expires_in = 1800,
+      interval = 5,
+      device_code = "mock-code",
+      user_code = "1234",
+      verification_uri = "https://example.org/oauth2/device",
+      verification_uri_complete = "https://example.org/oauth2/device?user_code=1234"
+    ))
   }
 
   .request_token_via_browser_mock <- function(auth_res, client_id) {
@@ -371,48 +313,29 @@ test_that("device_flow_auth correctly returns token info", {
     ".request_token_via_browser" = .request_token_via_browser_mock
   )
 
-  expect_equal(
-    observed,
-    list(status = 200)
-  ) ## This test isn't doing anything meaningful as we have to mock the final function, but there are tests for all the sub functions and we test the arguments are as expcted
+  # Check that the final response contains expected fields
+  expect_equal(observed$status, 200)
+  expect_equal(observed$expires_in, 1800)
+  expect_equal(observed$interval, 5)
 
+  # Check that .build_auth_request was called with expected args
   expect_equal(
     build_auth_request_args,
-    list(
-      list(
-        request = NULL,
-        authorize = "https://example.org/oauth2/authorize",
-        access = "https://example.org/oauth2/token",
-        user = "https://example.org/oauth2/userinfo",
-        device = "https://example.org/oauth2/device-authorize",
-        logout = "https://example.org/oauth2/logout"
-      ),
-      "b396233b-cdb2-449e-ac5c-a0d28b38f791",
-      c("openid", "offline_access")
-    )
+    list(endpoint, client_id, scopes)
   )
 
-  expect_equal(
-    class(req_perform_args),
-    "httr2_request"
-    )
+  # Check that req_perform received an httr2_request
+  expect_s3_class(req_perform_args, "httr2_request")
 
-  expect_equal(
-    names(req_perform_args),
-    c("url", "method", "headers", "body", "fields", "options", "policies")
-    )
+  expect_true(all(
+    c("url", "method", "headers", "body", "fields", "options", "policies") %in% names(req_perform_args)
+  ))
 
-  expect_equal(
-    resp_body_json_args,
-    "req_performed"
-  )
+  # Check that resp_body_json got the correct input
+  expect_equal(resp_body_json_args, "req_performed")
 
-  expect_equal(
-    request_token_via_browser_args,
-    list(
-      list(status = 200),
-      "b396233b-cdb2-449e-ac5c-a0d28b38f791"
-    )
-  )
-
+  # Check .request_token_via_browser received expected args
+  expect_equal(request_token_via_browser_args[[2]], client_id)
+  expect_equal(request_token_via_browser_args[[1]]$status, 200)
 })
+
