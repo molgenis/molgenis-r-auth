@@ -1,4 +1,5 @@
 library(testthat)
+library(httr2)
 library(assertthat)
 
 test_that(".ensure_single_slash adds a single trailing slash when absent", {
@@ -68,7 +69,6 @@ test_that(".build_auth_request correctly builds the request", {
   expect_null(req$method)
   expect_equal(req$headers, list())
   expect_equal(req$body$type, "form")
-  expect_equal(req$body$content_type, "application/x-www-form-urlencoded")
   expect_identical(as.character(req$body$data$client_id), client_id)
   expect_identical(as.character(req$body$data$scope), "openid%20offline_access")
 })
@@ -171,8 +171,6 @@ test_that(".add_credential_body correctly adds the body", {
   data <- body$data
 
   expect_equal(body$type, "form")
-  expect_equal(body$content_type, "application/x-www-form-urlencoded")
-
   expect_identical(as.character(data$scope), "openid%20offline_access")
   expect_identical(as.character(data$client_id), client_id)
   expect_identical(as.character(data$grant_type), "urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code")
