@@ -235,10 +235,14 @@ device_flow_auth <- function(endpoint, client_id, scopes = c("openid", "offline_
 #' @return A modified request object with retry logic added.
 #' @noRd
 .add_credential_retry <- function(req, auth_res) {
+  interval <- auth_res$interval
+  max_tries <- auth_res$expires_in / interval
+
   req |> req_retry(
-    max_tries = auth_res$expires_in / auth_res$interval,
+    max_tries = max_tries,
     is_transient = function(resp) {
       resp_status(resp) == 400
-    }
+    },
+    backoff = function(attempt) interval
   )
 }
